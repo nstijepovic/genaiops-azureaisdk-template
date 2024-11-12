@@ -60,6 +60,28 @@ jobs:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
           echo "$SECRETS_CONTEXT" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' > .env
+          
+          echo "=== .env file location ==="
+          realpath .env
+          pwd
+          echo "Current directory: $PWD/.env"
+          
+          echo -e "\n=== .env file content (masked) ==="
+          while IFS='=' read -r key value; do
+            if [ ! -z "$key" ]; then
+              echo "$key=***"
+            fi
+          done < .env
+          
+          echo -e "\n=== File permissions ==="
+          ls -la .env
+          
+          echo -e "\n=== Directory structure ==="
+          ls -la
+          
+          echo -e "\n=== Working directory structure ==="
+          tree -a -L 2 || ls -R  # try t
+
           python -c "from dotenv import load_dotenv; load_dotenv()"
           echo "Created .env file with all secrets"
 
