@@ -52,8 +52,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r .github/requirements/execute_job_requirements.txt
-          python -m pip install azure_ai_projects-1.0.0b1-py3-none-any.whl --user --force-reinstall
-          python -m pip install azure_ai_inference-1.0.0b5-py3-none-any.whl --user --force-reinstall
+          python -m pip install ../requirements/azure_ai_projects-1.0.0b1-py3-none-any.whl --user --force-reinstall
 
 
       - name: Create .env file
