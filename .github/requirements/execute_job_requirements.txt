@@ -4,6 +4,6 @@ azure-ai-evaluation[remote]==1.0.0b5
 azure-monitor-opentelemetry==1.6.4
 azure_ai_inference==1.0.0b5
 azure-ai-ml>=1.22.0
-azure-identity>1.19.0
+azure-identity>=1.19.0
 keyrings.alt
 python-dotenv
