@@ -4,12 +4,13 @@ import json
 from io import StringIO
 import os
 from azure.ai.inference import ChatCompletionsClient
-import azure.ai.inference.prompts
+from azure.ai.inference.prompts._patch import patch_sdk
+patch_sdk()
+from azure.ai.inference.prompts import PromptTemplate
 #from azure.ai.inference.prompts import PromptTemplate
 from azure.core.credentials import AzureKeyCredential
 import importlib
-module = importlib.import_module('azure.ai.inference.prompts')
-PromptTemplate = getattr(module, 'PromptTemplate')
+
 
 
 def infinite_loop_check(code_snippet):
