@@ -51,9 +51,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r .github/requirements/execute_job_requirements.txt
-          python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl --force-reinstall
-          python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl --force-reinstall
+          python -m pip install -r .github/requirements/execute_job_requirements.txt -U
+          python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
+          python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl -U --force-reinstall
 
       - name: Show installed packages
         run: |
