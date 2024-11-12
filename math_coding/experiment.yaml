@@ -1,0 +1,44 @@
+name: math_coding
+description: "This is a math coding experiment"
+flow: orchestration/python
+entry_point: pure_python_flow:get_math_response
+connections:
+- aoai
+- gpt4o
+env_vars:
+- env_var1: "value1"
+- env_var2: ${gpt4o_api_key}
+
+connections:
+- name: aoai
+  connection_type: AzureOpenAIConnection
+  api_base: https://demoopenaiexamples.openai.azure.com/
+  api_version: 2023-07-01-preview
+  api_key: ${aoai_api_key}
+  api_type: azure
+  deployment_name: ${gpt4o_deployment_name}
+- name: gpt4o
+  connection_type: AzureOpenAIConnection
+  api_base: https://demoopenaiexamples.openai.azure.com/
+  api_version: 2023-07-01-preview
+  api_key: ${gpt4o_api_key}
+  api_type: azure
+  deployment_name: ${gpt4o_deployment_name}
+
+evaluators:
+- name: math_evaluation_flow
+  flow: evaluations
+  entry_point: pure_python_flow:get_math_response
+  connections:
+  - aoai
+  - gpt4o
+  env_vars:
+  - env_var1: "value1"
+    env_var2: ${gpt4o_api_key}
+  datasets:
+  - name: math_coding_test
+    source: data/math_data.jsonl
+    description: "This dataset is for evaluating flows."
+    mappings:
+      ground_truth: "${data.answer}"
+      response: "${target.response}"
