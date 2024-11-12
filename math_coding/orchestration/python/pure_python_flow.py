@@ -4,12 +4,11 @@ import json
 from io import StringIO
 import os
 from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.prompts._patch import patch_sdk
-patch_sdk()
-from azure.ai.inference.prompts import PromptTemplate
 #from azure.ai.inference.prompts import PromptTemplate
 from azure.core.credentials import AzureKeyCredential
 import importlib
+azure_prompts = importlib.import_module('azure.ai.inference.prompts')
+PromptTemplate = getattr(azure_prompts, 'PromptTemplate')
 
 
 
