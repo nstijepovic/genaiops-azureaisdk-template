@@ -51,8 +51,8 @@ jobs:
           python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
           python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl -U --force-reinstall
               
-          - name: Python code linting
-          run:  flake8 ./llmops ./tests
+      - name: Python code linting
+        run:  flake8 ./llmops ./tests
   
       - name: Execute Unit Tests
         shell: bash
@@ -64,7 +64,7 @@ jobs:
         with:
           name: unit-test-results
           \path: "**/test-*.xml"
-          
+
       - name: Create .env file
         env: 
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
