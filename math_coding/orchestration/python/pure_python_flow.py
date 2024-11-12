@@ -86,7 +86,7 @@ def get_math_response(question):
         exit()
 
     path = "../prompts/math_prompt.prompty"
-    prompt_template = Prom PromptTemplate.from_prompty(file_path=path)
+    prompt_template = PromptTemplate.from_prompty(file_path=path)
     
     messages = prompt_template.render(question=question)
     client = ChatCompletionsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
