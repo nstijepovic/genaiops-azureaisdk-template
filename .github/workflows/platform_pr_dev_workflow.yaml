@@ -7,20 +7,24 @@ on:
         type: string
         description: "Execution Environment"
         required: true
+        default: "pr"
       use_case_base_path:
         type: string
         description: "The flow use-case to execute"
         required: true
+        default: "math_coding"
   workflow_dispatch:
     inputs:
       env_name:
         type: string
         description: "Execution Environment"
         required: true
+        default: "pr"
       use_case_base_path:
         type: string
         description: "The flow use-case to execute"
         required: true
+        default: "math_coding"
 
 
 jobs:
