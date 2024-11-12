@@ -19,7 +19,7 @@ on:
         type: string
         description: "Execution Environment"
         required: true
-        default: "dev"
+        default: "pr"
       use_case_base_path:
         type: string
         description: "The flow usecase to execute"

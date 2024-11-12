@@ -55,20 +55,27 @@ class Evaluator:
     env_vars: List[Dict[str, str]]
     datasets: List[DatasetMapping]
 
-    def resolve_env_vars(self, env_vars: Dict[str, str]) -> Dict[str, str]:
-        """Resolve environment variables in evaluator configuration."""
-        resolved_vars = {}
+    def resolve_variables(self) -> None:
+        """Resolve all variables in the experiment configuration."""
+        load_dotenv()
+        env_vars = dict(os.environ)
+
+        # Resolve connection variables in main experiment
+        for conn in self.connections:
+            conn.resolve_variables(env_vars)
+
+        # Resolve experiment env vars
+        self.resolved_env_vars = {}
         for env_var_dict in self.env_vars:
             for key, value in env_var_dict.items():
                 if isinstance(value, str) and "${" in value:
                     var_name = re.search(r'\${(.*)}', value).group(1)
                     if var_name in env_vars:
-                        resolved_vars[key] = env_vars[var_name]
+                        self.resolved_env_vars[key] = env_vars[var_name]
                     else:
                         raise ValueError(f"Environment variable {var_name} not found")
                 else:
-                    resolved_vars[key] = value
-        return resolved_vars
+                    self.resolved_env_vars[key] = value
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any], connections_map: Dict[str, Connection]) -> 'Evaluator':
@@ -213,11 +220,9 @@ class Experiment:
                 else:
                     self.resolved_env_vars[key] = value
 
+
         # Resolve evaluator variables and their connection variables
-        for evaluator in self.evaluators:
-            evaluator.resolve_env_vars(env_vars)
-            for conn in evaluator.connections:
-                conn.resolve_variables(env_vars)
+
 
     def get_evaluator(self, evaluator_name: str) -> Optional[Evaluator]:
         """Get evaluator configuration by name."""

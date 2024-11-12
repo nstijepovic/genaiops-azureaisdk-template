@@ -1,16 +1,31 @@
 import argparse
 import datetime
-import json
+
 import os
-import pandas as pd
+import sys
+
 from dotenv import load_dotenv
 from typing import Optional
 import inspect
 import importlib
 import argparse
-from azure.identity import DefaultAzureCredential
+
 from llmops.experiment import load_experiment
 from llmops.experiment_cloud_config import ExperimentCloudConfig
+
+
+def set_environment_variables(env_dict):
+    """
+    Set environment variables from a dictionary.
+    
+    Args:
+        env_dict (dict): Dictionary containing environment variable names and values
+    """
+    for key, value in env_dict.items():
+        os.environ[key] = str(value)
+        # Print confirmation for each variable set
+        print(f"Environment variable '{key}' set to: {value}")
+
 
 def prepare_and_execute(
     exp_filename: Optional[str] = None,
@@ -37,8 +52,9 @@ def prepare_and_execute(
     )
 
     orchestration_entry_point = experiment.entry_point
-
     orchestration_connections = experiment.connections
+    print(experiment.resolved_env_vars)
+    set_environment_variables(experiment.resolved_env_vars)
 
     if report_dir:
         if not os.path.exists(report_dir):
@@ -48,6 +64,9 @@ def prepare_and_execute(
         evaluator_path = os.path.join(
             base_path, evaluator.flow
         )
+        evaluator.resolve_variables()
+        print(evaluator.resolved_env_vars)
+        set_environment_variables(evaluator.resolved_env_vars)
         evaluator_entry_point = evaluator.entry_point
 
         service_module = None
@@ -63,7 +82,7 @@ def prepare_and_execute(
                     f'{flow_formatted}.'
                     f'{module_name}'
                 )
-                import sys
+                
                 dependent_modules_dir = os.path.join(
                     base_path, experiment.flow
                     )
@@ -71,8 +90,6 @@ def prepare_and_execute(
                 current_dir = os.path.dirname(os.path.abspath(__file__))  # evaluations folder
                 parent_dir = os.path.dirname(current_dir)  # math_coding folder
                 sys.path.insert(0, parent_dir)
-
-
 
                 service_module = importlib.import_module(
                     module_path
