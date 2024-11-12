@@ -39,7 +39,7 @@ on:
 #=====================================
 jobs:
   execute-platform-flow-ci:
-    uses: .github/workflows/platform_ci_dev_workflow.yaml
+    uses: ./.github/workflows/platform_ci_dev_workflow.yaml
     secrets: inherit
     with:
       env_name: ${{ inputs.env_name || 'dev'}}
