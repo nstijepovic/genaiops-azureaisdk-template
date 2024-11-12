@@ -7,23 +7,23 @@ connections:
 - gpt4o
 env_vars:
 - env_var1: "value1"
-- env_var2: ${gpt4o_api_key}
+- env_var2: ${GPT4O_API_KEY}
 
 connections:
 - name: aoai
   connection_type: AzureOpenAIConnection
   api_base: https://demoopenaiexamples.openai.azure.com/
   api_version: 2023-07-01-preview
-  api_key: ${aoai_api_key}
+  api_key: ${AOAI_API_KEY}
   api_type: azure
-  deployment_name: ${gpt4o_deployment_name}
+  deployment_name: ${GPT4O_DEPLOYMENT_NAME}
 - name: gpt4o
   connection_type: AzureOpenAIConnection
   api_base: https://demoopenaiexamples.openai.azure.com/
   api_version: 2023-07-01-preview
-  api_key: ${gpt4o_api_key}
+  api_key: ${GPT4O_API_KEY}
   api_type: azure
-  deployment_name: ${gpt4o_deployment_name}
+  deployment_name: ${GPT4O_DEPLOYMENT_NAME}
 
 evaluators:
 - name: math_evaluation_flow
@@ -34,7 +34,7 @@ evaluators:
   - gpt4o
   env_vars:
   - env_var1: "value1"
-    env_var2: ${gpt4o_api_key}
+    env_var2: ${GPT4O_API_KEY}
   datasets:
   - name: math_coding_test
     source: data/math_data.jsonl

@@ -26,7 +26,7 @@ load_dotenv()
 
 
 def eval_run_eval(name, data_path, column_mapping, output_path ):
-    project = AIProjectClient.from_connection_string(conn_str= os.environ["connection_string"], credential=DefaultAzureCredential())
+    project = AIProjectClient.from_connection_string(conn_str= os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential())
     f1score = F1ScoreEvaluator()
     result = evaluate(
         data="math_coding/data/math_data.jsonl",

@@ -5,6 +5,6 @@ connections:
   connection_type: AzureOpenAIConnection
   api_base: https://demoopenaiexamples.openai.azure.com/
   api_version: sadadasddsaad
-  api_key: ${aoai_api_key}
+  api_key: ${AOAI_API_KEY}
   api_type: azure
-  deployment_name: ${gpt4o_deployment_name}
+  deployment_name: ${GPT4O_DEPLOYMENT_NAME}
