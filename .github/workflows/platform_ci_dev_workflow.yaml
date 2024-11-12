@@ -54,6 +54,26 @@ jobs:
           python -m pip install -r .github/requirements/execute_job_requirements.txt
           python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl
 
+          - name: Show installed packages
+          run: |
+            echo "=== Pip Version ==="
+            pip --version
+            
+            echo -e "\n=== All Installed Packages (including dependencies) ==="
+            pip list
+            
+            echo -e "\n=== Packages in requirements.txt ==="
+            cat requirements.txt
+            
+            echo -e "\n=== Dependency Tree ==="
+            pip install pipdeptree
+            pipdeptree
+            
+            echo -e "\n=== Package Details ==="
+            pip list --format=columns
+            
+            echo -e "\n=== Outdated Packages ==="
+            pip list --outdated || echo "No outdated packages"
 
       - name: Create .env file
         env: 
