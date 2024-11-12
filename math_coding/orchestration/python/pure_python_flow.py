@@ -4,8 +4,13 @@ import json
 from io import StringIO
 import os
 from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.prompts import PromptTemplate
+import azure.ai.inference.prompts
+#from azure.ai.inference.prompts import PromptTemplate
 from azure.core.credentials import AzureKeyCredential
+import importlib
+module = importlib.import_module('azure.ai.inference.prompts')
+PromptTemplate = getattr(module, 'PromptTemplate')
+
 
 def infinite_loop_check(code_snippet):
     tree = ast.parse(code_snippet)
@@ -81,7 +86,7 @@ def get_math_response(question):
         exit()
 
     path = "../prompts/math_prompt.prompty"
-    prompt_template = PromptTemplate.from_prompty(file_path=path)
+    prompt_template = Prom PromptTemplate.from_prompty(file_path=path)
     
     messages = prompt_template.render(question=question)
     client = ChatCompletionsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
