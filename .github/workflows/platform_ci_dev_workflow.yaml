@@ -12,7 +12,7 @@ on:
         type: string
         description: "The flow use-case to execute"
         required: true
-        default: "web_classification"
+        default: "math_coding"
   workflow_dispatch:
     inputs:
       env_name:
@@ -24,7 +24,7 @@ on:
         type: string
         description: "The flow use-case to execute"
         required: true
-        default: "web_classification"
+        default: "math_coding"
 jobs:
   flow-experiment-and_evaluation:
     name: prompt flow experiment and evaluation job
