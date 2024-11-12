@@ -88,7 +88,7 @@ jobs:
         with:
           step_name: "Execute prompt flow bulk run"
           script_parameter: |
-            python -m llmops.eval_experiment \
+            python -m llmops.eval_experiments \
             --environment_name ${{ inputs.env_name }} \
             --base_path ${{ inputs.use_case_base_path }} \
             --report_dir "."
