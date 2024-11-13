@@ -105,7 +105,33 @@ jobs:
             const data = yaml.load(fileContents);
             core.setOutput('config', data);
 
+      - name: Copy scripts and template
+        env:
+          FLOW: ${{ fromJson(steps.yaml.outputs.config).flow }}
+          ENTRY_POINT: ${{ fromJson(steps.yaml.outputs.config).entry_point }}
+          USE_CASE_PATH: ${{ github.event.inputs.use_case_base_path }}
+        run: |
+          echo "Flow name is: $NAME"
+          echo "API base is: $API_BASE"
+          ENTRY_POINT_FILE=$(echo "$ENTRY_POINT" | cut -d':' -f1).py
 
+          FULL_PATH="${{ github.event.inputs.use_case_base_path }}/$FLOW/$ENTRY_POINT_FILE"
+          echo "Full path: $FULL_PATH"
+
+          # Create directory if it doesn't exist
+          mkdir -p genai_temp/${{ github.event.inputs.use_case_base_path }}
+
+          # Copy the template
+          cp -r llmops/deployment/function_template/* "genai_temp/${{ github.event.inputs.use_case_base_path }}"
+
+          # Copy the script
+          cp $FULL_PATH "agenai_temp/${{ github.event.inputs.use_case_base_path }}/function_processor/"
+
+          # Copy the script
+          cp ${{ github.event.inputs.use_case_base_path }}/deployment/function_orchestrator.py agenai_temp/${{ github.event.inputs.use_case_base_path }}/function_processor/
+            
+          # Verify copy
+          ls -la genai_temp/${{ github.event.inputs.use_case_base_path }}/
 
       - name: Create deployment package
         run: |
