@@ -116,3 +116,10 @@ jobs:
             --base_path ${{ inputs.use_case_base_path }} \
             --report_dir "."
 
+  deploy-flow:
+    uses: ./.github/workflows/platform_cd_function_deployment.yml
+    needs: flow-experiment-and_evaluation
+    with:
+      env_name: ${{ inputs.env_name }}
+      use_case_base_path: ${{ inputs.use_case_base_path }} 
+    secrets: inherit

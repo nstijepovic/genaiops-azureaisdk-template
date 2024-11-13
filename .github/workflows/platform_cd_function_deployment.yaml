@@ -1,4 +1,4 @@
-name: platform_pr_dev_workflow
+name: platform_cd_dev_workflow
 
 on:
   workflow_call:
@@ -7,30 +7,28 @@ on:
         type: string
         description: "Execution Environment"
         required: true
-        default: "pr"
       use_case_base_path:
         type: string
         description: "The flow use-case to execute"
         required: true
-        default: "math_coding"
   workflow_dispatch:
     inputs:
       env_name:
         type: string
         description: "Execution Environment"
         required: true
-        default: "pr"
+        default: "dev"
       use_case_base_path:
         type: string
         description: "The flow use-case to execute"
         required: true
-        default: "math_coding"
-
 
 jobs:
-  pr_flow_validation:
+  flow-deployment:
+    name: prompt flow deployment job
     runs-on: ubuntu-latest
-    environment: "${{ inputs.env_name }}"
+    environment:
+      name: ${{ inputs.env_name }}
     env:
       RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
       WORKSPACE_NAME: ${{ vars.PROJECT_NAME }}
@@ -51,57 +49,44 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r .github/requirements/build_validation_requirements.txt -U
+          python -m pip install -r .github/requirements/execute_job_requirements.txt -U
           python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
           #python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl -U --force-reinstall
-              
-      - name: Python code linting
-        run:  flake8 ./llmops ./tests
-  
-      - name: Execute Unit Tests
-        shell: bash
-        run: |
-          pytest ${{ inputs.use_case_base_path }}/tests --junitxml=junit/test-results.xml --cov=. --cov-report=xml
-  
-      - name: Publish Unit Test Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: unit-test-results
-          \path: "**/test-*.xml"
+            
 
       - name: Create .env file
         env: 
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
           echo "$SECRETS_CONTEXT" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' > .env
-            
+          
           echo "=== .env file location ==="
           realpath .env
           pwd
           echo "Current directory: $PWD/.env"
-            
+          
           echo -e "\n=== .env file content (masked) ==="
           while IFS='=' read -r key value; do
             if [ ! -z "$key" ]; then
               echo "$key=***"
             fi
           done < .env
-            
+          
           echo -e "\n=== File permissions ==="
           ls -la .env
-            
+          
           echo -e "\n=== Directory structure ==="
           ls -la
-            
+          
           echo -e "\n=== Working directory structure ==="
           tree -a -L 2 || ls -R  # try t
-  
+
           python -c "from dotenv import load_dotenv; load_dotenv()"
           echo "Created .env file with all secrets"
-  
+
       - name: load .env file
         run: python -c "from dotenv import load_dotenv; load_dotenv()"
-  
+
       - name: load the current Azure subscription details
         id: subscription_details
         shell: bash
@@ -109,12 +94,53 @@ jobs:
           export subscriptionId=$(az account show --query id -o tsv)
           echo "SUBSCRIPTION_ID=$subscriptionId" >> $GITHUB_OUTPUT
 
-      - name: Execute prompt flow bulk run
-        uses: ./.github/actions/execute_script
+      - name: Read YAML file
+        id: yaml
+        uses: actions/github-script@v6
         with:
-          step_name: "Execute prompt flow bulk run"
-          script_parameter: |
-            python -m llmops.eval_experiments \
-            --environment_name ${{ inputs.env_name }} \
-            --base_path ${{ inputs.use_case_base_path }} \
-            --report_dir "."
+          script: |
+            const yaml = require('js-yaml');
+            const fs = require('fs');
+            const fileContents = fs.readFileSync('your-config.yaml', 'utf8');
+            const data = yaml.load(fileContents);
+            core.setOutput('config', data);
+
+      - name: Copy scripts and template
+        env:
+          FLOW: ${{ fromJson(steps.yaml.outputs.config).flow }}
+          ENTRY_POINT: ${{ fromJson(steps.yaml.outputs.config).entry_point }}
+        run: |
+          echo "Flow name is: $NAME"
+          echo "API base is: $API_BASE"
+          ENTRY_POINT_FILE=$(echo "$ENTRY_POINT" | cut -d':' -f1).py
+
+          FULL_PATH="${{ github.event.inputs.use_case_base_path }}/$FLOW/$ENTRY_POINT_FILE"
+          echo "Full path: $FULL_PATH"
+
+          # Create directory if it doesn't exist
+          mkdir -p genai_temp/${{ github.event.inputs.use_case_base_path }}
+
+          # Copy the template
+          cp -r llmops/deployment/function_template/* "genai_temp/${{ github.event.inputs.use_case_base_path }}"
+
+          # Copy the script
+          cp $FULL_PATH "agenai_temp/${{ github.event.inputs.use_case_base_path }}/function_processor/"
+
+        # Copy the script
+          cp "${{ github.event.inputs.use_case_base_path }}/deployment/function_orchestrator.py" "agenai_temp/${{ github.event.inputs.use_case_base_path }}/function_processor/"
+            
+          # Verify copy
+          ls -la genai_temp/${{ github.event.inputs.use_case_base_path }}/
+
+      - name: Create deployment package
+        run: |
+          cd genai_temp
+          zip -r ../function_deploy.zip .
+          cd ..
+
+      - name: Deploy to Azure Functions
+        run: |
+          az functionapp deployment source config-zip \
+            -g "my_function_apps" \
+            -n "myfunctionappsgenai" \
+            --src function_deploy.zip 
