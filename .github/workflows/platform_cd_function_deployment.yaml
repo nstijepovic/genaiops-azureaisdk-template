@@ -177,7 +177,7 @@ jobs:
 
           while IFS= read -r line; do
             settings+=("$line")
-          done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+          done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries[] | .[] | "\(.key)=\(.value)"')
 
           command="az functionapp config appsettings set \
             --name 'myfunctionappsgenai' \
