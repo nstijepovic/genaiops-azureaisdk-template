@@ -128,33 +128,34 @@ jobs:
             core.setOutput('flow', data.flow);
             core.setOutput('entry_point', data.entry_point);
 
+            
+
       - name: Copy scripts and template
         env:
           FLOW: ${{ fromJson(steps.yaml.outputs.config).flow }}
           ENTRY_POINT: ${{ fromJson(steps.yaml.outputs.config).entry_point }}
-          USE_CASE_PATH: ${{ github.event.inputs.use_case_base_path }}
+          USE_CASE_PATH: ${{ inputs.use_case_base_path }}
         run: |
-          echo "Flow name is: $NAME"
-          echo "API base is: $API_BASE"
+
           ENTRY_POINT_FILE=$(echo "$ENTRY_POINT" | cut -d':' -f1).py
 
-          FULL_PATH="${{ github.event.inputs.use_case_base_path }}/$FLOW/$ENTRY_POINT_FILE"
+          FULL_PATH="$USE_CASE_PATH/$FLOW/$ENTRY_POINT_FILE"
           echo "Full path: $FULL_PATH"
 
           # Create directory if it doesn't exist
-          mkdir -p genai_temp/${{ github.event.inputs.use_case_base_path }}
+          mkdir -p genai_temp/$USE_CASE_PATH
 
           # Copy the template
-          cp -r llmops/deployment/function_template/* "genai_temp/${{ github.event.inputs.use_case_base_path }}"
+          cp -r llmops/deployment/function_template/* "genai_temp/$USE_CASE_PATH"
 
           # Copy the script
-          cp $FULL_PATH "agenai_temp/${{ github.event.inputs.use_case_base_path }}/function_processor/"
+          cp $FULL_PATH "agenai_temp/$USE_CASE_PATH/function_processor/"
 
           # Copy the script
-          cp ${{ github.event.inputs.use_case_base_path }}/deployment/function_orchestrator.py agenai_temp/${{ github.event.inputs.use_case_base_path }}/function_processor/
+          cp $USE_CASE_PATH/deployment/function_orchestrator.py agenai_temp/$USE_CASE_PATH/function_processor/
             
           # Verify copy
-          ls -la genai_temp/${{ github.event.inputs.use_case_base_path }}/
+          ls -la genai_temp/$USE_CASE_PATH/
 
       - name: Create deployment package
         run: |
