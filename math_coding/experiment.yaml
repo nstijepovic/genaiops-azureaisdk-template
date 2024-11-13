@@ -30,11 +30,11 @@ evaluators:
   flow: evaluations
   entry_point: pure_python_flow:get_math_response
   connections:
-    - aoai
-    - gpt4o
+    - aoai1
+    - gpt4o1
   env_vars:
-    - env_var1: "value1"
-    - env_var2: ${GPT4O_API_KEY}
+    - env_var3: "value1"
+    - env_var4: ${GPT4O_API_KEY}
   datasets:
     - name: math_coding_test
       source: data/math_data.jsonl
