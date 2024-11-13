@@ -122,7 +122,11 @@ jobs:
             const fs = require('fs');
             const fileContents = fs.readFileSync(configPath, 'utf8');
             const data = yaml.load(fileContents);
+            console.log('flow:', data.flow);
+            console.log('entry_point:', data.entry_point);
             core.setOutput('config', data);
+            core.setOutput('flow', data.flow);
+            core.setOutput('entry_point', data.entry_point);
 
       - name: Copy scripts and template
         env:
