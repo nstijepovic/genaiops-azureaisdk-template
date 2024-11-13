@@ -53,7 +53,21 @@ jobs:
           python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
           #python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl -U --force-reinstall
             
-
+      - name: Install js-yaml
+        run: |
+          npm install js-yaml
+          
+      # If you're using it in a Node.js script
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          
+      - name: Install Dependencies
+        run: |
+          npm init -y
+          npm install js-yaml @actions/core @actions/github
+      
       - name: Create .env file
         env: 
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -97,11 +111,14 @@ jobs:
       - name: Read YAML file
         id: yaml
         uses: actions/github-script@v6
+        env:
+          CONFIG_PATH: ${{ github.event.inputs.use_case_base_path }}/experiment.yaml
         with:
           script: |
+            const configPath = process.env.CONFIG_PATH;
             const yaml = require('js-yaml');
             const fs = require('fs');
-            const fileContents = fs.readFileSync('your-config.yaml', 'utf8');
+            const fileContents = fs.readFileSync(configPath, 'utf8');
             const data = yaml.load(fileContents);
             core.setOutput('config', data);
 
