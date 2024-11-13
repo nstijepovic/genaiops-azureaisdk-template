@@ -160,8 +160,8 @@ jobs:
 
       - name: Create deployment package
         run: |
-          cd genai_temp
-          zip -r ../function_deploy.zip .
+          cd genai_temp/${{ inputs.use_case_base_path }}
+          zip function_deploy.zip * -r
           cd ..
 
       - name: Deploy to Azure Functions
@@ -169,4 +169,4 @@ jobs:
           az functionapp deployment source config-zip \
             -g "my_function_apps" \
             -n "myfunctionappsgenai" \
-            --src function_deploy.zip 
+            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip 
