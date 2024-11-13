@@ -3,42 +3,42 @@ description: "This is a math coding experiment"
 flow: orchestration/python
 entry_point: pure_python_flow:get_math_response
 connections:
-- aoai
-- gpt4o
+  - aoai
+  - gpt4o
 env_vars:
-- env_var1: "value1"
-- env_var2: ${GPT4O_API_KEY}
+  - env_var1: "value1"
+  - env_var2: ${GPT4O_API_KEY}
 
 connections:
-- name: aoai
-  connection_type: AzureOpenAIConnection
-  api_base: https://demoopenaiexamples.openai.azure.com/
-  api_version: 2023-07-01-preview
-  api_key: ${AOAI_API_KEY}
-  api_type: azure
-  deployment_name: ${GPT4O_DEPLOYMENT_NAME}
-- name: gpt4o
-  connection_type: AzureOpenAIConnection
-  api_base: https://demoopenaiexamples.openai.azure.com/
-  api_version: 2023-07-01-preview
-  api_key: ${GPT4O_API_KEY}
-  api_type: azure
-  deployment_name: ${GPT4O_DEPLOYMENT_NAME}
+  - name: aoai
+    connection_type: AzureOpenAIConnection
+    api_base: https://demoopenaiexamples.openai.azure.com/
+    api_version: 2023-07-01-preview
+    api_key: ${AOAI_API_KEY}
+    api_type: azure
+    deployment_name: ${GPT4O_DEPLOYMENT_NAME}
+  - name: gpt4o
+    connection_type: AzureOpenAIConnection
+    api_base: https://demoopenaiexamples.openai.azure.com/
+    api_version: 2023-07-01-preview
+    api_key: ${GPT4O_API_KEY}
+    api_type: azure
+    deployment_name: ${GPT4O_DEPLOYMENT_NAME}
 
 evaluators:
 - name: math_evaluation_flow
   flow: evaluations
   entry_point: pure_python_flow:get_math_response
   connections:
-  - aoai
-  - gpt4o
+    - aoai
+    - gpt4o
   env_vars:
-  - env_var1: "value1"
-    env_var2: ${GPT4O_API_KEY}
+    - env_var1: "value1"
+    - env_var2: ${GPT4O_API_KEY}
   datasets:
-  - name: math_coding_test
-    source: data/math_data.jsonl
-    description: "This dataset is for evaluating flows."
-    mappings:
-      ground_truth: "${data.answer}"
-      response: "${target.response}"
+    - name: math_coding_test
+      source: data/math_data.jsonl
+      description: "This dataset is for evaluating flows."
+      mappings:
+        ground_truth: "${data.answer}"
+        response: "${target.response}"
