@@ -170,7 +170,7 @@ jobs:
         run: |
           az functionapp deployment source config-zip \
             -g "my_function_apps" \
-            -n "myfunctionappsgenai" \
+            -n "abrakadabraa" \
             --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
 
           settings=()
@@ -180,7 +180,7 @@ jobs:
           done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"')
 
           command="az functionapp config appsettings set \
-            --name 'myfunctionappsgenai' \
+            --name 'abrakadabraa' \
             --resource-group 'my_function_apps'"
 
           for setting in "${settings[@]}"; do
@@ -190,5 +190,7 @@ jobs:
           eval "$command"
 
           az functionapp config appsettings set \
-            --name 'myfunctionappsgenai' \
+            --name 'abrakadabraa' \
             --resource-group 'my_function_apps' --settings "AZURE_AI_CHAT_ENDPOINT={{ secrets.AZURE_AI_CHAT_ENDPOINT }}" "AZURE_AI_CHAT_KEY={{ secrets.AZURE_AI_CHAT_KEY }}"
+
+
