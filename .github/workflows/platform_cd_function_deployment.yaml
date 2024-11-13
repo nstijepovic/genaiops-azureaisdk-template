@@ -149,7 +149,7 @@ jobs:
           # Copy the template
           cp -r llmops/deployment/function_template/* "genai_temp/$USE_CASE_PATH"
 
-          cp -r $USE_CASE_PATH/$FLOW_DIR/prompts ./
+          cp -r $USE_CASE_PATH/$FLOW_DIR/prompts .
           # Copy the script
           cp -r "$FULL_PATH" "genai_temp/$USE_CASE_PATH/function_processor"
 
@@ -192,4 +192,4 @@ jobs:
 
           az functionapp config appsettings set \
             --name 'myfunctionappsgenai' \
-            --resource-group 'my_function_apps' --settings "AZURE_AI_CHAT_ENDPOINT={{ secrets.AZURE_AI_CHAT_ENDPOINT}}" "AZURE_AI_CHAT_KEY={{ secrets.AZURE_AI_CHAT_KEY}}"
+            --resource-group 'my_function_apps' --settings "AZURE_AI_CHAT_ENDPOINT={{ secrets.AZURE_AI_CHAT_ENDPOINT }}" "AZURE_AI_CHAT_KEY={{ secrets.AZURE_AI_CHAT_KEY }}"
