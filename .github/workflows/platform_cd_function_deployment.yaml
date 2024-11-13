@@ -191,4 +191,4 @@ jobs:
 
           az functionapp config appsettings set \
             --name 'myfunctionappsgenai' \
-            --resource-group 'my_function_apps' -settings "AZURE_AI_CHAT_ENDPOINT={{ secrets.AZURE_AI_CHAT_ENDPOINT}}" "AZURE_AI_CHAT_KEY={{ secrets.AZURE_AI_CHAT_KEY}}"
+            --resource-group 'my_function_apps' --settings "AZURE_AI_CHAT_ENDPOINT={{ secrets.AZURE_AI_CHAT_ENDPOINT}}" "AZURE_AI_CHAT_KEY={{ secrets.AZURE_AI_CHAT_KEY}}"
