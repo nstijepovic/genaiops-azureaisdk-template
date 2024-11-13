@@ -168,8 +168,6 @@ jobs:
         env:
             SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
-          SETTINGS_STRING=$(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | map("--settings \"\(.key)=\(.value)\"") | join(" ")')
-
           az functionapp deployment source config-zip \
             -g "my_function_apps" \
             -n "myfunctionappsgenai" \
@@ -178,7 +176,7 @@ jobs:
           command="az functionapp config appsettings set \
             --name "myfunctionappsgenai" \
             --resource-group "my_function_apps" \
-            --settings
+            --settings"
 
           echo "$SECRETS_CONTEXT" | jq -r 'to_entries[] | "--settings \"\(.key)=\(.value)\""' | while read -r setting; do
             command+=" $setting"
