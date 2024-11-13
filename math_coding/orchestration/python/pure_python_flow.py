@@ -81,7 +81,7 @@ def get_math_response(question):
         print("Set them before running this sample.")
         exit()
 
-    path = "../prompts/math_prompt.prompty"
+    path = "./math_prompt.prompty"
     prompt_template = PromptTemplate.from_prompty(file_path=path)
     
     messages = prompt_template.create_messages(question=question)

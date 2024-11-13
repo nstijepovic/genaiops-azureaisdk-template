@@ -139,7 +139,7 @@ jobs:
 
           ENTRY_POINT_FILE=$(echo "$ENTRY_POINT" | cut -d':' -f1).py
           FLOW_DIR=$(echo "$FLOW" | cut -d'/' -f1)
-          FULL_PATH="$USE_CASE_PATH/$FLOW/$ENTRY_POINT_FILE"
+          FULL_PATH="$USE_CASE_PATH/$FLOW"
           echo "Full path: $FULL_PATH"
 
           # Create directory if it doesn't exist
@@ -150,6 +150,7 @@ jobs:
           cp -r llmops/deployment/function_template/* "genai_temp/$USE_CASE_PATH"
 
           cp -r $USE_CASE_PATH/$FLOW_DIR/prompts .
+
           # Copy the script
           cp -r "$FULL_PATH" "genai_temp/$USE_CASE_PATH/function_processor"
 
