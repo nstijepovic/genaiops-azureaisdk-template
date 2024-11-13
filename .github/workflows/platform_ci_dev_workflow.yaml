@@ -117,7 +117,7 @@ jobs:
             --report_dir "."
 
   deploy-flow:
-    uses: ./.github/workflows/platform_cd_function_deployment.yml
+    uses: ./.github/workflows/platform_cd_function_deployment.yaml
     needs: flow-experiment-and_evaluation
     with:
       env_name: ${{ inputs.env_name }}
