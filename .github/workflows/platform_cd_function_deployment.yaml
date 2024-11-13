@@ -165,8 +165,17 @@ jobs:
           cd ..
 
       - name: Deploy to Azure Functions
+        env:
+            SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
+          SETTINGS_STRING=$(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | map("--settings \"\(.key)=\(.value)\"") | join(" ")')
+
           az functionapp deployment source config-zip \
             -g "my_function_apps" \
             -n "myfunctionappsgenai" \
-            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip 
+            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
+
+          eval "az functionapp config appsettings set \
+             --name "my_function_apps" \
+             --resource-group "myfunctionappsgenai" \
+             $SETTINGS_STRING"
