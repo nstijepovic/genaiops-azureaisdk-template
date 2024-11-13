@@ -150,10 +150,10 @@ jobs:
           cp -r llmops/deployment/function_template/* "genai_temp/$USE_CASE_PATH"
 
           # Copy the script
-          cp $FULL_PATH agenai_temp/$USE_CASE_PATH/function_processor
+          cp -r "$FULL_PATH" "agenai_temp/$USE_CASE_PATH/function_processor"
 
           # Copy the script
-          cp $USE_CASE_PATH/deployment/function_orchestrator.py agenai_temp/$USE_CASE_PATH/function_processor
+          cp -r $USE_CASE_PATH/deployment/function_orchestrator.py genai_temp/$USE_CASE_PATH/function_processor
             
           # Verify copy
           ls -la genai_temp/$USE_CASE_PATH/
