@@ -139,7 +139,7 @@ jobs:
 
           ENTRY_POINT_FILE=$(echo "$ENTRY_POINT" | cut -d':' -f1).py
           FLOW_DIR=$(echo "$FLOW" | cut -d'/' -f1)
-          FULL_PATH="$USE_CASE_PATH/$FLOW"
+          FULL_PATH="$USE_CASE_PATH/$FLOW/*"
           echo "Full path: $FULL_PATH"
 
           # Create directory if it doesn't exist
