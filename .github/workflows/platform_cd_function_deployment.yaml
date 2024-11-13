@@ -173,13 +173,18 @@ jobs:
             -n "myfunctionappsgenai" \
             --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
 
-          command="az functionapp config appsettings set \
-            --name "myfunctionappsgenai" \
-            --resource-group "my_function_apps" \
-            --settings"
+          settings=()
 
-          echo "$SECRETS_CONTEXT" | jq -r 'to_entries[] | "--settings \"\(.key)=\(.value)\""' | while read -r setting; do
-            command+=" $setting"
+          while IFS= read -r line; do
+            settings+=("$line")
+          done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+
+          command="az functionapp config appsettings set \
+            --name 'myfunctionappsgenai' \
+            --resource-group 'my_function_apps'"
+
+          for setting in "${settings[@]}"; do
+            command+=" --settings \"$setting\""
           done
 
           eval "$command"
