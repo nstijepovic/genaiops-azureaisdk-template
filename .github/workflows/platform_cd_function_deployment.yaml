@@ -11,6 +11,7 @@ on:
         type: string
         description: "The flow use-case to execute"
         required: true
+        default: "math_coding"
   workflow_dispatch:
     inputs:
       env_name:
@@ -22,6 +23,7 @@ on:
         type: string
         description: "The flow use-case to execute"
         required: true
+        default: "math_coding"
 
 jobs:
   flow-deployment:
@@ -112,7 +114,7 @@ jobs:
         id: yaml
         uses: actions/github-script@v6
         env:
-          CONFIG_PATH: ${{ github.event.inputs.use_case_base_path }}/experiment.yaml
+          CONFIG_PATH: ${{ inputs.use_case_base_path }}/experiment.yaml
         with:
           script: |
             const configPath = process.env.CONFIG_PATH;
