@@ -1,4 +1,4 @@
-name: platform_cd_dev_workflow
+name: platform_cd_function_deployment
 
 on:
   workflow_call:
