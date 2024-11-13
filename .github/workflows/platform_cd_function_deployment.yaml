@@ -175,7 +175,14 @@ jobs:
             -n "myfunctionappsgenai" \
             --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
 
-          eval "az functionapp config appsettings set \
-             --name "myfunctionappsgenai" \
-             --resource-group "my_function_apps" \
-             $SETTINGS_STRING"
+          command="az functionapp config appsettings set \
+            --name "myfunctionappsgenai" \
+            --resource-group "my_function_apps" \
+            --settings
+
+          while IFS="=" read -r key value; do
+            [ -z "$key" ] && continue  # Skip empty lines
+            command+=" \"$key=$value\""
+          done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"')
+
+          eval "$command"
