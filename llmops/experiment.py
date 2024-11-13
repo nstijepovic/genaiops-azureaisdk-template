@@ -81,7 +81,7 @@ class Evaluator:
     def from_dict(cls, data: Dict[str, Any], connections_map: Dict[str, Connection]) -> 'Evaluator':
         # Expand connections from connection names to actual Connection objects
         expanded_connections = []
-        for conn_name in data['connections']:
+        for conn_name in data['connections_ref']:
             if conn_name in connections_map:
                 expanded_connections.append(deepcopy(connections_map[conn_name]))
             else:
@@ -172,7 +172,7 @@ class Experiment:
 
         # Expand connections in main experiment config
         expanded_connections = []
-        for conn_name in config['connections']:
+        for conn_name in config['connections_ref']:
             if isinstance(conn_name, str):  # Handle case where connection might already be expanded
                 if conn_name in connections_map:
                     expanded_connections.append(deepcopy(connections_map[conn_name]))

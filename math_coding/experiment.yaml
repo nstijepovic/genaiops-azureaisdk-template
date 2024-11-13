@@ -2,7 +2,7 @@ name: math_coding
 description: "This is a math coding experiment"
 flow: orchestration/python
 entry_point: pure_python_flow:get_math_response
-connections:
+connections_ref:
   - aoai
   - gpt4o
 env_vars:
@@ -43,7 +43,7 @@ evaluators:
 - name: math_evaluation_flow
   flow: evaluations
   entry_point: pure_python_flow:get_math_response
-  connections:
+  connections_ref:
     - aoai1
     - gpt4o1
   env_vars:

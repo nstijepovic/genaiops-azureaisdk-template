@@ -1,7 +1,7 @@
 
 
 connections:
-- name: aoai
+- name: aoai4
   connection_type: AzureOpenAIConnection
   api_base: https://demoopenaiexamples.openai.azure.com/
   api_version: sadadasddsaad
