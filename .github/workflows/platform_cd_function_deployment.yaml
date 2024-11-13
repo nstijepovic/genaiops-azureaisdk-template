@@ -180,9 +180,8 @@ jobs:
             --resource-group "my_function_apps" \
             --settings
 
-          while IFS="=" read -r key value; do
-            [ -z "$key" ] && continue  # Skip empty lines
-            command+=" \"$key=$value\""
-          done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"')
+          echo "$SECRETS_CONTEXT" | jq -r 'to_entries[] | "--settings \"\(.key)=\(.value)\""' | while read -r setting; do
+            command+=" $setting"
+          done
 
           eval "$command"
