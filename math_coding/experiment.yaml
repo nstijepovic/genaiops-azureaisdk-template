@@ -24,6 +24,20 @@ connections:
     api_key: ${GPT4O_API_KEY}
     api_type: azure
     deployment_name: ${GPT4O_DEPLOYMENT_NAME}
+  - name: aoai1
+    connection_type: AzureOpenAIConnection
+    api_base: https://demoopenaiexamples.openai.azure.com/
+    api_version: 2023-07-01-preview
+    api_key: ${AOAI_API_KEY}
+    api_type: azure
+    deployment_name: ${GPT4O_DEPLOYMENT_NAME}
+  - name: gpt4o1
+    connection_type: AzureOpenAIConnection
+    api_base: https://demoopenaiexamples.openai.azure.com/
+    api_version: 2023-07-01-preview
+    api_key: ${GPT4O_API_KEY}
+    api_type: azure
+    deployment_name: ${GPT4O_DEPLOYMENT_NAME}
 
 evaluators:
 - name: math_evaluation_flow
