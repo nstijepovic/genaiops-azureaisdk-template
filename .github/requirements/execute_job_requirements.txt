@@ -7,3 +7,5 @@ azure-identity>=1.19.0
 keyrings.alt
 python-dotenv
 azure-ai-inference[prompts]==1.0.0b6
+azure-mgmt-web>=7.3.1
+azure-mgmt-resource>=23.2.0

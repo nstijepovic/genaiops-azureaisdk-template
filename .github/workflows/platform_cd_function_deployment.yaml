@@ -173,24 +173,33 @@ jobs:
             -n "abrakadabraa" \
             --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
 
-          settings=()
+          if [ -z "$SECRETS_CONTEXT" ]; then
+            echo "Error: SECRETS_CONTEXT environment variable is required"
+            exit 1
+          fi
 
-          while IFS= read -r line; do
-            settings+=("$line")
-          done < <(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | .[] | "\(.key)=\(.value)"')
 
-          command="az functionapp config appsettings set \
-            --name 'abrakadabraa' \
-            --resource-group 'my_function_apps'"
 
-          for setting in "${settings[@]}"; do
-            command+=" --settings \"$setting\""
-          done
+          # Configuration
+          FUNCTION_APP="abrakadabraa"
+          RESOURCE_GROUP="my_function_apps"
 
-          eval "$command"
+          # Direct JSON transformation using jq
+          json_settings=$(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | map({key: .key, value: .value}) | map({(.key): .value}) | add')
 
-          az functionapp config appsettings set \
-            --name 'abrakadabraa' \
-            --resource-group 'my_function_apps' --settings "AZURE_AI_CHAT_ENDPOINT={{ secrets.AZURE_AI_CHAT_ENDPOINT }}" "AZURE_AI_CHAT_KEY={{ secrets.AZURE_AI_CHAT_KEY }}"
+          if [ -z "$json_settings" ] || [ "$json_settings" = "null" ]; then
+            echo "Error: Failed to parse secrets from SECRETS_CONTEXT"
+            exit 1
+          fi
 
+          # Execute the command with JSON input
+          if ! az functionapp config appsettings set \
+            --name "$FUNCTION_APP" \
+            --resource-group "$RESOURCE_GROUP" \
+            --settings "$json_settings"; then
+            echo "Error: Failed to update Function App settings"
+            exit 1
+          fi
+
+          echo "Successfully updated Function App settings"
 
