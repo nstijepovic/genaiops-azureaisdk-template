@@ -149,7 +149,14 @@ jobs:
             const dep_config_path = process.env.DEPLOYMENT_CONFIG_PATH;
             const deployment_Config = fs.readFileSync(dep_config_path, 'utf8');
             const dep_data = yaml.load(deployment_Config);
-            core.setOutput('dep_config', dep_data.function_app);
+            core.setOutput('dep_config', dep_data);
+
+            console.log('function:', dep_data.resource_group);
+            console.log('function:', dep_data.app_name);
+            console.log('function:', dep_data.function_name);
+            core.setOutput('func_resource_group', dep_data.resource_group);
+            core.setOutput('func_app_name', dep_data.app_name);
+            core.setOutput('func_function_name', dep_data.function_name);
 
 
             
@@ -192,6 +199,7 @@ jobs:
         env:
             SECRETS_CONTEXT: ${{ toJson(secrets) }}
             DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config) }}
+
         run: |
           resource_group=$(echo "$DEP_CONFIG" | jq -r '.resource_group')
           app_name=$(echo "$DEP_CONFIG" | jq -r '.app_name')
@@ -239,7 +247,7 @@ jobs:
       - name: INvoke Azure function
         env:
             SECRETS_CONTEXT: ${{ toJson(secrets) }}
-            DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config).function_app }}
+            DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config) }}
         run: |
           resource_group=$(echo "$DEP_CONFIG" | jq -r '.resource_group')
           app_name=$(echo "$DEP_CONFIG" | jq -r '.app_name')

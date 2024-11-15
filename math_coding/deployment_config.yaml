@@ -1,17 +1,16 @@
 name: math_coding
 description: "This is a math coding experiment"
 type: function_app
-function_app:
-  resource_group: my_function_apps
-  service_name: ASP-myfunctionapps-9a77
-  app_name: abrakadabraa
-  function_name: process_math
-  runtime: python
-  version: 3.11
-  location: northeurope
-  env_vars:
-   - GPT4O_DEPLOYMENT_NAME
-   - GPT4O_API_KEY
-   - AOAI_API_KEY
-   - AZURE_AI_CHAT_ENDPOINT
-   - AZURE_AI_CHAT_KEY
+resource_group: my_function_apps
+service_name: ASP-myfunctionapps-9a77
+app_name: abrakadabraa
+function_name: process_math
+runtime: python
+version: 3.11
+location: northeurope
+env_vars:
+  - GPT4O_DEPLOYMENT_NAME
+  - GPT4O_API_KEY
+  - AOAI_API_KEY
+  - AZURE_AI_CHAT_ENDPOINT
+  - AZURE_AI_CHAT_KEY
