@@ -295,4 +295,4 @@ jobs:
               
               # Add a small delay between requests
               sleep 1
-          done < <(jq -c '.[]' "$INPUT_FILE")
+          done < <(jq -c '.[]' "$input_file")
