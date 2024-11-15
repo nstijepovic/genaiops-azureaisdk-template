@@ -69,7 +69,24 @@ jobs:
         run: |
           npm init -y
           npm install js-yaml @actions/core @actions/github
-      
+
+          - name: Install jq
+          run: |
+            sudo apt-get update
+            sudo apt-get install jq
+  
+      - name: Install yq
+        run: |
+          VERSION="v4.40.5"  # Specify the version you want
+          BINARY="yq_linux_amd64"
+          wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
+          tar xz && sudo mv ${BINARY} /usr/bin/yq
+            
+      - name: Verify installations
+        run: |
+          jq --version
+          yq --version
+
       - name: Create .env file
         env: 
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -132,7 +149,7 @@ jobs:
             const dep_config_path = process.env.DEPLOYMENT_CONFIG_PATH;
             const deployment_Config = fs.readFileSync(dep_config_path, 'utf8');
             const dep_data = yaml.load(deployment_Config);
-            core.setOutput('dep_config', dep_data);
+            core.setOutput('dep_config', dep_data.function_app);
 
 
             
@@ -174,7 +191,7 @@ jobs:
       - name: Deploy to Azure Functions
         env:
             SECRETS_CONTEXT: ${{ toJson(secrets) }}
-            DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config).function_app }}
+            DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config) }}
         run: |
           resource_group=$(echo "$DEP_CONFIG" | jq -r '.resource_group')
           app_name=$(echo "$DEP_CONFIG" | jq -r '.app_name')
