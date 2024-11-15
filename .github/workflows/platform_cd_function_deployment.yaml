@@ -198,8 +198,8 @@ jobs:
       - name: Deploy to Azure Functions
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
-          RESOURCE_GROUP: ${{ fromJson(steps.yaml.outputs.func_resource_group) }}
-          APP_NAME: ${{ fromJson(steps.yaml.outputs.func_app_name) }}
+          RESOURCE_GROUP: ${{ steps.yaml.outputs.func_resource_group }}
+          APP_NAME: ${{ steps.yaml.outputs.func_app_name }}
         run: |
           az functionapp deployment source config-zip \
             -g $RESOURCE_GROUP \
@@ -230,13 +230,14 @@ jobs:
 
           echo "Successfully updated Function App settings"
 
-      - name: INvoke Azure function
+      - name: Invoke Azure function
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
-          RESOURCE_GROUP: ${{ fromJson(steps.yaml.outputs.func_resource_group) }}
-          APP_NAME: ${{ fromJson(steps.yaml.outputs.func_app_name) }}
-          FUNCTION_NAME: ${{ fromJson(steps.yaml.outputs.func_function_name) }}
+          RESOURCE_GROUP: ${{ steps.yaml.outputs.func_resource_group }}
+          APP_NAME: ${{ steps.yaml.outputs.func_app_name }}
+          FUNCTION_NAME: ${{ steps.yaml.outputs.func_function_name }}
         run: |
+
           input_file=${{ inputs.use_case_base_path }}/sample-request.json 
           
           echo "Getting function URL..."
