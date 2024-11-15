@@ -239,6 +239,9 @@ jobs:
         run: |
 
           input_file=${{ inputs.use_case_base_path }}/sample-request.json 
+          echo "Resource Group: $RESOURCE_GROUP"
+          echo "App Name: $APP_NAME"
+          echo "Function Name: $FUNCTION_NAME"
           
           echo "Getting function URL..."
           FUNCTION_URL=$(az functionapp function show -g $RESOURCE_GROUP -n $APP_NAME --function-name $FUNCTION_NAME --query "invokeUrlTemplate" -o tsv)
