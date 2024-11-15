@@ -70,10 +70,10 @@ jobs:
           npm init -y
           npm install js-yaml @actions/core @actions/github
 
-          - name: Install jq
-          run: |
-            sudo apt-get update
-            sudo apt-get install jq
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq
   
       - name: Install yq
         run: |
