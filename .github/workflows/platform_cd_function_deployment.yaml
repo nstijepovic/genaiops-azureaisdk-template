@@ -115,6 +115,7 @@ jobs:
         uses: actions/github-script@v6
         env:
           CONFIG_PATH: ${{ inputs.use_case_base_path }}/experiment.yaml
+          DEPLOYMENT_CONFIG_PATH: ${{ inputs.use_case_base_path }}/deployment_config.yaml
         with:
           script: |
             const configPath = process.env.CONFIG_PATH;
@@ -127,6 +128,12 @@ jobs:
             core.setOutput('config', data);
             core.setOutput('flow', data.flow);
             core.setOutput('entry_point', data.entry_point);
+
+            const dep_config_path = process.env.DEPLOYMENT_CONFIG_PATH;
+            const deployment_Config = fs.readFileSync(dep_config_path, 'utf8');
+            const dep_data = yaml.load(deployment_Config);
+            core.setOutput('dep_config', dep_data);
+
 
             
 
@@ -167,22 +174,39 @@ jobs:
       - name: Deploy to Azure Functions
         env:
             SECRETS_CONTEXT: ${{ toJson(secrets) }}
+            DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config).function_app }}
         run: |
+          resource_group=$(echo "$DEP_CONFIG" | jq -r '.resource_group')
+          app_name=$(echo "$DEP_CONFIG" | jq -r '.app_name')
+
+          # Extract environment variables as a space-separated string
+          env_vars=$(echo "$DEP_CONFIG" | jq -r '.env_vars[]' | tr '\n' ' ')
+
+          # Validate that required values are present
+          if [ -z "$resource_group" ] || [ "$resource_group" == "null" ]; then
+            echo "Error: resource_group not found in configuration"
+            exit 1
+          fi
+
+          if [ -z "$app_name" ] || [ "$app_name" == "null" ]; then
+            echo "Error: app_name not found in configuration"
+            exit 1
+          fi
+
+          if [ -z "$env_vars" ] || [ "$env_vars" == "null" ]; then
+            echo "Warning: No environment variables found in configuration"
+          fi
+
+
           az functionapp deployment source config-zip \
-            -g "my_function_apps" \
-            -n "abrakadabraa" \
+            -g $resource_group \
+            -n $app_name \
             --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
 
           if [ -z "$SECRETS_CONTEXT" ]; then
             echo "Error: SECRETS_CONTEXT environment variable is required"
             exit 1
           fi
-
-
-
-          # Configuration
-          FUNCTION_APP="abrakadabraa"
-          RESOURCE_GROUP="my_function_apps"
 
           # Direct JSON transformation using jq
           json_settings=$(echo "$SECRETS_CONTEXT" | jq -r 'to_entries | map({key: .key, value: .value}) | map({(.key): .value}) | add')
@@ -194,8 +218,8 @@ jobs:
 
           # Execute the command with JSON input
           if ! az functionapp config appsettings set \
-            --name "$FUNCTION_APP" \
-            --resource-group "$RESOURCE_GROUP" \
+            --name $app_name \
+            --resource-group $resource_group \
             --settings "$json_settings"; then
             echo "Error: Failed to update Function App settings"
             exit 1
@@ -203,3 +227,72 @@ jobs:
 
           echo "Successfully updated Function App settings"
 
+      - name: INvoke Azure function
+        env:
+            SECRETS_CONTEXT: ${{ toJson(secrets) }}
+            DEP_CONFIG: ${{ fromJson(steps.yaml.outputs.dep_config).function_app }}
+        run: |
+          resource_group=$(echo "$DEP_CONFIG" | jq -r '.resource_group')
+          app_name=$(echo "$DEP_CONFIG" | jq -r '.app_name')
+          function_name=$(echo "$DEP_CONFIG" | jq -r '.function_name')
+          input_file=${{ inputs.use_case_base_path }}/sample-request.json 
+
+          Validate that required values are present
+          if [ -z "$resource_group" ] || [ "$resource_group" == "null" ]; then
+            echo "Error: resource_group not found in configuration"
+            exit 1
+          fi
+          
+          if [ -z "$app_name" ] || [ "$app_name" == "null" ]; then
+            echo "Error: app_name not found in configuration"
+            exit 1
+          fi
+          
+          if [ -z "$function_name" ] || [ "$function_name" == "null" ]; then
+            echo "Error: function_name not found in configuration"
+            exit 1
+          fi
+          
+          echo "Getting function URL..."
+          FUNCTION_URL=$(az functionapp function show -g $resource_group -n $app_name --function-name $function_name --query "invokeUrlTemplate" -o tsv)
+          if [ -z "$FUNCTION_URL" ]; then
+            echo "Error: Could not get function URL. Please check the function app and function name."
+            exit 1
+          fi
+          
+          # Get function key
+          echo "Getting function key..."
+          FUNCTION_KEY=$(az functionapp function keys list -g $resource_group -n $app_name --function-name $function_name --query "default" -o tsv)
+          if [ -z "$FUNCTION_KEY" ]; then
+            echo "Error: Could not get function key. Please check your permissions."
+            exit 1
+          fi
+          
+          echo "Function URL: $FUNCTION_URL"
+          echo "Starting to process records..."
+          
+          # Process each JSON object in the file
+          while IFS= read -r item; do
+              # Extract the question and encode it
+              question=$(echo "$item" | jq -r '.question')
+              encoded_question=$(echo "$question" | jq -sRr @uri)
+              
+              # Construct the request URL
+              request_url="${FUNCTION_URL}?code=${FUNCTION_KEY}&question=${encoded_question}"
+              
+              # Send GET request to Azure Function
+              response=$(curl -s -X GET \
+                  -H "Content-Type: application/json" \
+                  "$request_url")
+              
+              # Check if curl command was successful
+              if [ $? -eq 0 ]; then
+                  echo "Success: $response"
+              else
+                  echo "Error invoking function"
+                  echo "Response: $response"
+              fi
+              
+              # Add a small delay between requests
+              sleep 1
+          done < <(jq -c '.[]' "$INPUT_FILE")

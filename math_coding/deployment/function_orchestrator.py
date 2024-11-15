@@ -6,11 +6,11 @@ from typing import Dict, Any
 # Blueprint creation
 bp = func.Blueprint()
 
-@bp.route(route="process-entities")
-def process_entities(req: func.HttpRequest) -> func.HttpResponse:
+@bp.route(route="process-math")
+def process_math(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP Trigger handler that coordinates the request/response flow
-    and delegates business logic to extract_entities.py
+    and delegates business logic to pure_python_flow.py
     """
     try:
         # 1. Request handling
@@ -29,7 +29,7 @@ def process_entities(req: func.HttpRequest) -> func.HttpResponse:
             from . import pure_python_flow
             result = pure_python_flow.get_math_response(question)
         except ImportError as ie:
-            logging.error(f"Failed to import extract_entities: {str(ie)}")
+            logging.error(f"Failed to import pure_python_flow: {str(ie)}")
             return func.HttpResponse(
                 body=json.dumps({"error": "Business logic module not available"}),
                 mimetype="application/json",

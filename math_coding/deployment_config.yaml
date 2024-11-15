@@ -5,6 +5,7 @@ function_app:
   resource_group: my_function_apps
   service_name: ASP-myfunctionapps-9a77
   app_name: abrakadabraa
+  function_name: process_math
   runtime: python
   version: 3.11
   location: northeurope
