@@ -179,9 +179,6 @@ jobs:
           resource_group=$(echo "$DEP_CONFIG" | jq -r '.resource_group')
           app_name=$(echo "$DEP_CONFIG" | jq -r '.app_name')
 
-          # Extract environment variables as a space-separated string
-          env_vars=$(echo "$DEP_CONFIG" | jq -r '.env_vars[]' | tr '\n' ' ')
-
           # Validate that required values are present
           if [ -z "$resource_group" ] || [ "$resource_group" == "null" ]; then
             echo "Error: resource_group not found in configuration"
@@ -192,11 +189,6 @@ jobs:
             echo "Error: app_name not found in configuration"
             exit 1
           fi
-
-          if [ -z "$env_vars" ] || [ "$env_vars" == "null" ]; then
-            echo "Warning: No environment variables found in configuration"
-          fi
-
 
           az functionapp deployment source config-zip \
             -g $resource_group \
