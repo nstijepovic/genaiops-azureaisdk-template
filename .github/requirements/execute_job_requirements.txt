@@ -9,3 +9,4 @@ python-dotenv
 azure-ai-inference[prompts]==1.0.0b6
 azure-mgmt-web>=7.3.1
 azure-mgmt-resource>=23.2.0
+azure-monitor-opentelemetry==1.6.4
