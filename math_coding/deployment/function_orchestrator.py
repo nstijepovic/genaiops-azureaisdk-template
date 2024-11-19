@@ -11,6 +11,27 @@ from azure.monitor.opentelemetry import configure_azure_monitor
 # Blueprint creation
 bp = func.Blueprint()
 
+def enable_telemetry(log_to_project: bool = False):
+
+    # enable logging message contents
+    os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = log_to_project
+
+    project = AIProjectClient.from_connection_string(
+        conn_str=os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential()
+    )
+    
+    project.telemetry.enable()
+        
+    application_insights_connection_string = project.telemetry.get_connection_string()
+    
+    if not application_insights_connection_string:
+        logging.warning(
+            "No application insights configured, telemetry will not be logged to project. Add application insights at:"
+        )
+
+    configure_azure_monitor(connection_string=application_insights_connection_string)
+    logging.info("Enabled telemetry logging to project, view traces at:")
+
 
 @bp.route(route="process-math")
 def process_math(req: func.HttpRequest) -> func.HttpResponse:
