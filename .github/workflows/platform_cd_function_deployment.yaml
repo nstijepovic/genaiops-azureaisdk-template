@@ -237,7 +237,7 @@ jobs:
           APP_NAME: ${{ steps.yaml.outputs.func_app_name }}
           FUNCTION_NAME: ${{ steps.yaml.outputs.func_function_name }}
         run: |
-          sleep 60
+          sleep 30
           input_file=${{ inputs.use_case_base_path }}/sample-request.json 
           echo "Resource Group: $RESOURCE_GROUP"
           echo "App Name: $APP_NAME"
