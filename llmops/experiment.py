@@ -1,21 +1,27 @@
+"""Experiment configuration module."""
 import os
-import yaml
-from typing import Dict, List, Optional, Any, Union
+import re
+from copy import deepcopy
 from dataclasses import dataclass, field
 from pathlib import Path
-import re
+from typing import Any, Dict, List, Optional, Union
+
+import yaml
 from dotenv import load_dotenv
-from copy import deepcopy
+
 
 @dataclass
 class DatasetMapping:
+    """Mapping configuration for datasets."""
     name: str
     source: str
     description: Optional[str] = None
     mappings: Dict[str, str] = field(default_factory=dict)
 
+
 @dataclass
 class Connection:
+    """Connection configuration for external services."""
     name: str
     connection_type: str
     api_base: str
@@ -36,6 +42,7 @@ class Connection:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Connection':
+        """Create a Connection instance from a dictionary."""
         return cls(
             name=data['name'],
             connection_type=data['connection_type'],
@@ -46,8 +53,10 @@ class Connection:
             deployment_name=data['deployment_name']
         )
 
+
 @dataclass
 class Evaluator:
+    """Evaluator configuration for experiment evaluation."""
     name: str
     flow: str
     entry_point: str

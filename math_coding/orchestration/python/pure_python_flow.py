@@ -1,14 +1,16 @@
-import sys
 import ast
 import json
-from io import StringIO
 import os
+import sys
+from io import StringIO
+
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.prompts import PromptTemplate
 from azure.core.credentials import AzureKeyCredential
 
 
 def infinite_loop_check(code_snippet):
+    """Check if the code snippet has an infinite loop"""
     tree = ast.parse(code_snippet)
     for node in ast.walk(tree):
         if isinstance(node, ast.While):
@@ -18,6 +20,7 @@ def infinite_loop_check(code_snippet):
 
 
 def syntax_error_check(code_snippet):
+    """Check if the code snippet has a syntax error"""
     try:
         ast.parse(code_snippet)
     except SyntaxError:
@@ -26,6 +29,7 @@ def syntax_error_check(code_snippet):
 
 
 def error_fix(code_snippet):
+    """Fix the code snippet by adding a break statement to the infinite loop"""
     tree = ast.parse(code_snippet)
     for node in ast.walk(tree):
         if isinstance(node, ast.While):
@@ -33,8 +37,9 @@ def error_fix(code_snippet):
                 node.orelse = [ast.Pass()]
     return ast.unparse(tree)
 
-def code_refine(original_code: str) -> str:
 
+def code_refine(original_code: str) -> str:
+    """Refine the code snippet by fixing infinite loops and syntax errors"""
     try:
         original_code = json.loads(original_code)["code"]
         fixed_code = None
@@ -53,7 +58,9 @@ def code_refine(original_code: str) -> str:
     except Exception as e:
         return "Unknown Error:" + str(e)
 
+
 def func_exe(code_snippet: str):
+    """Execute the code snippet and return the result"""
     if code_snippet == "JSONDecodeError" or code_snippet.startswith("Unknown Error:"):
         return code_snippet
 
@@ -71,7 +78,9 @@ def func_exe(code_snippet: str):
     sys.stdout = old_stdout
     return redirected_output.getvalue().strip()
 
+
 def get_math_response(question):
+    """Get the response for the math question"""
     try:
         endpoint = os.environ["AZURE_AI_CHAT_ENDPOINT"]
         key = os.environ["AZURE_AI_CHAT_KEY"]
@@ -97,7 +106,9 @@ def get_math_response(question):
     result = func_exe(code_refined)
     return {"response": result}
 
+
 if __name__ == "__main__":
+    """Test the math response"""
     question = "what is 10 + 20?"
     result = get_math_response(question)
     print(result)
