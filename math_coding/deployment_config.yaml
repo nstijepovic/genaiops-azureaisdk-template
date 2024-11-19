@@ -3,7 +3,7 @@ description: "This is a math coding experiment"
 type: function_app
 resource_group: my_function_apps
 service_name: ASP-myfunctionapps-9a77
-app_name: abrakadabraa
+app_name: testgenaifunction
 function_name: process_math1
 runtime: python
 version: 3.11
