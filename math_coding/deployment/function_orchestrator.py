@@ -4,14 +4,13 @@ import azure.functions as func
 import json
 from typing import Dict, Any
 from azure.identity import DefaultAzureCredential
-#from azure.ai.projects import AIProjectClient
+from azure.ai.projects import AIProjectClient
+from azure.monitor.opentelemetry import configure_azure_monitor
 #from azure.ai.inference.tracing import AIInferenceInstrumentor
 
 # Blueprint creation
 bp = func.Blueprint()
 
-#if os.environ["ENABLE_TELEMETRY"]
-#  enable_telemetry(os.environ["LOG_TO_PROJECT"])
 
 @bp.route(route="process-math")
 def process_math(req: func.HttpRequest) -> func.HttpResponse:
@@ -21,6 +20,7 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
     """
     try:
         # 1. Request handling
+        #enable_telemetry(True)
         question = req.params.get('question')
         
         # 2. Input validation

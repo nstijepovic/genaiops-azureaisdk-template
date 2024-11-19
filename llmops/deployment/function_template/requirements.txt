@@ -7,8 +7,5 @@ azure-monitor-opentelemetry
 azure-ai-ml>=1.22.0
 azure-identity>=1.19.0
 azure-ai-inference
-opentelemetry
-azure-core-tracing-opentelemetry
-azure-ai-inference[opentelemetry]
 
 
