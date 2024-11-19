@@ -32,7 +32,7 @@ def eval_run_eval(
     result = evaluate(
         data=data_path,
         target=get_math_response,
-        evaluation_name="evaluate_chat_with_products",
+        evaluation_name="evaluate_math_responses",
         evaluators={
             "f1_score": f1score,
         },
