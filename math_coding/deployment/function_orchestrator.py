@@ -7,6 +7,7 @@ from azure.core.settings import settings
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 from azure.ai.inference.tracing import AIInferenceInstrumentor
+from azure.monitor.opentelemetry import configure_azure_monitor
 
 # Blueprint creation
 bp = func.Blueprint()
@@ -26,23 +27,24 @@ def enable_telemetry(log_to_project: bool = False):
         project = AIProjectClient.from_connection_string(
             conn_str=os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential()
         )
-        tracing_link = f"https://ai.azure.com/tracing?wsid=/subscriptions/{project.scope[os.environ['SUBSCRIPTION_ID']]}/resourceGroups/{project.scope[os.environ['RESOURCE_GROUP_NAME']]}/providers/Microsoft.MachineLearningServices/workspaces/{project.scope[os.environ['PROJECT_NAME']]}"
+        #project.telemetry.enable(destination=None)
+        #tracing_link = f"https://ai.azure.com/tracing?wsid=/subscriptions/{project.scope[os.environ['SUBSCRIPTION_ID']]}/resourceGroups/{project.scope[os.environ['RESOURCE_GROUP_NAME']]}/providers/Microsoft.MachineLearningServices/workspaces/{project.scope[os.environ['PROJECT_NAME']]}"
         application_insights_connection_string = project.telemetry.get_connection_string()
         if not application_insights_connection_string:
             logging.warning(
                 "No application insights configured, telemetry will not be logged to project. Add application insights at:"
             )
-            logging.warning(tracing_link)
+            #logging.warning(tracing_link)
 
             return
 
         configure_azure_monitor(connection_string=application_insights_connection_string)
         logging.info("Enabled telemetry logging to project, view traces at:")
-        logging.info(tracing_link)    
+        #logging.info(tracing_link)    
 
 
-if os.environ["ENABLE_TELEMETRY"]
-  enable_telemetry(os.environ["ENABLE_TELEMETRY"])
+if os.environ["ENABLE_TELEMETRY"]:
+    enable_telemetry(os.environ["ENABLE_TELEMETRY"])
 
 
 @bp.route(route="process-math")
