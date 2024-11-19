@@ -11,10 +11,10 @@ from azure.monitor.opentelemetry import configure_azure_monitor
 # Blueprint creation
 bp = func.Blueprint()
 
-def enable_telemetry(log_to_project: bool = False):
+def enable_telemetry():
 
     # enable logging message contents
-    os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = log_to_project
+    os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = "True"
 
     project = AIProjectClient.from_connection_string(
         conn_str=os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential()
