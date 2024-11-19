@@ -9,6 +9,8 @@ from azure.ai.projects import AIProjectClient
 from azure.ai.inference.tracing import AIInferenceInstrumentor
 from azure.monitor.opentelemetry import configure_azure_monitor
 
+from dotenv import load_dotenv
+load_dotenv()
 # Blueprint creation
 bp = func.Blueprint()
 
