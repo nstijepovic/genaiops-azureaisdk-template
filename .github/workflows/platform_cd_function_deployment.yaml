@@ -185,8 +185,6 @@ jobs:
 
           # Copy the script
           cp -r $USE_CASE_PATH/deployment/function_orchestrator.py genai_temp/$USE_CASE_PATH/function_processor
-
-          cp -r .env genai_temp/$USE_CASE_PATH/
             
           # Verify copy
           ls -la genai_temp/$USE_CASE_PATH/

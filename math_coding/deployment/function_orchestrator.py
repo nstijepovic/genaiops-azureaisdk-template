@@ -9,8 +9,6 @@ from azure.ai.projects import AIProjectClient
 from azure.ai.inference.tracing import AIInferenceInstrumentor
 from azure.monitor.opentelemetry import configure_azure_monitor
 
-from dotenv import load_dotenv
-load_dotenv()
 # Blueprint creation
 bp = func.Blueprint()
 
@@ -45,8 +43,8 @@ def enable_telemetry(log_to_project: bool = False):
         #logging.info(tracing_link)    
 
 
-if os.environ["ENABLE_TELEMETRY"]:
-    enable_telemetry(os.environ["ENABLE_TELEMETRY"])
+
+
 
 
 @bp.route(route="process-math")
@@ -57,6 +55,7 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
     """
     try:
         # 1. Request handling
+        enable_telemetry(True)
         question = req.params.get('question')
         
         # 2. Input validation
