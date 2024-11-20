@@ -1,13 +1,13 @@
 
 python-dotenv>=0.10.3
-azure-ai-evaluation[remote]==1.0.0b5
+azure-ai-evaluation
 azure-monitor-opentelemetry==1.6.4
 azure-ai-ml>=1.22.0
 azure-identity>=1.19.0
 keyrings.alt
 python-dotenv
 azure-ai-projects
-azure-ai-inference[prompts]==1.0.0b6
+azure-ai-inference[prompts]
 azure-mgmt-web>=7.3.1
 azure-mgmt-resource>=23.2.0
 azure-monitor-opentelemetry==1.6.4

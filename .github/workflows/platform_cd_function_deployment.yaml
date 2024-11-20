@@ -52,7 +52,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r .github/requirements/execute_job_requirements.txt -U
-          python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
+          #python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
           #python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl -U --force-reinstall
             
       - name: Install js-yaml
@@ -204,7 +204,7 @@ jobs:
             -g $RESOURCE_GROUP \
             -n $APP_NAME \
             --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
-            
+
           if [ -z "$SECRETS_CONTEXT" ]; then
             echo "Error: SECRETS_CONTEXT environment variable is required"
             exit 1
