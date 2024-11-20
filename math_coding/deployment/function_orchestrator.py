@@ -41,7 +41,7 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
     """
     try:
         # 1. Request handling
-        enable_telemetry(True)
+        enable_telemetry()
         question = req.params.get('question')
         
         # 2. Input validation
