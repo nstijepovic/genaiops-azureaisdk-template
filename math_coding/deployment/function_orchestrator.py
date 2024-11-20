@@ -11,6 +11,19 @@ from azure.monitor.opentelemetry import configure_azure_monitor
 # Blueprint creation
 bp = func.Blueprint()
 
+_is_initialized = False
+
+def initialize_once():
+    """Run startup code only once"""
+    global _is_initialized
+    if not _is_initialized:
+        logging.info("Running startup initialization...")
+        enable_telemetry()
+        _is_initialized = True
+
+# Run initialization when module loads
+initialize_once()
+
 def enable_telemetry():
 
     # enable logging message contents
@@ -39,7 +52,6 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
     """
     try:
         # 1. Request handling
-        enable_telemetry()
         question = req.params.get('question')
         
         # 2. Input validation
