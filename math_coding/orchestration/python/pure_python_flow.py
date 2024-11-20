@@ -84,13 +84,13 @@ def get_math_response(question):
     try:
         endpoint = os.environ["AZURE_AI_CHAT_ENDPOINT"]
         key = os.environ["AZURE_AI_CHAT_KEY"]
-        
+        prompty_file = os.environ["PROMPTY_FILE"]
     except KeyError:
         print("Missing environment variable 'AZURE_AI_CHAT_ENDPOINT' or 'AZURE_AI_CHAT_KEY'")
         print("Set them before running this sample.")
         exit()
 
-    path = "./math_prompt.prompty"
+    path = f"./{prompty_file}"
     prompt_template = PromptTemplate.from_prompty(file_path=path)
     
     messages = prompt_template.create_messages(question=question)
