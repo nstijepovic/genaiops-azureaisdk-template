@@ -20,7 +20,7 @@ def enable_telemetry():
         conn_str=os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential()
     )
     
-    project.telemetry.enable()
+    
         
     application_insights_connection_string = project.telemetry.get_connection_string()
     
@@ -28,7 +28,7 @@ def enable_telemetry():
         logging.warning(
             "No application insights configured, telemetry will not be logged to project. Add application insights at:"
         )
-
+    project.telemetry.enable()
     configure_azure_monitor(connection_string=application_insights_connection_string)
     logging.info("Enabled telemetry logging to project, view traces at:")
 
