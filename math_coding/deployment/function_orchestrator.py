@@ -18,7 +18,7 @@ def initialize_once():
     global _is_initialized
     if not _is_initialized:
         logging.info("Running startup initialization...")
-        enable_telemetry()
+        
         _is_initialized = True
 
 # Run initialization when module loads
@@ -52,6 +52,7 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
     """
     try:
         # 1. Request handling
+        enable_telemetry()
         question = req.params.get('question')
         
         # 2. Input validation
