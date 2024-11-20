@@ -167,7 +167,6 @@ jobs:
           ENTRY_POINT: ${{ fromJson(steps.yaml.outputs.config).entry_point }}
           USE_CASE_PATH: ${{ inputs.use_case_base_path }}
         run: |
-
           ENTRY_POINT_FILE=$(echo "$ENTRY_POINT" | cut -d':' -f1).py
           FLOW_DIR=$(echo "$FLOW" | cut -d'/' -f1)
           FULL_PATH="$USE_CASE_PATH/$FLOW/*"
@@ -201,6 +200,11 @@ jobs:
           RESOURCE_GROUP: ${{ steps.yaml.outputs.func_resource_group }}
           APP_NAME: ${{ steps.yaml.outputs.func_app_name }}
         run: |
+          az functionapp deployment source config-zip \
+            -g $RESOURCE_GROUP \
+            -n $APP_NAME \
+            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
+            
           if [ -z "$SECRETS_CONTEXT" ]; then
             echo "Error: SECRETS_CONTEXT environment variable is required"
             exit 1
@@ -222,11 +226,6 @@ jobs:
             echo "Error: Failed to update Function App settings"
             exit 1
           fi
-
-          az functionapp deployment source config-zip \
-            -g $RESOURCE_GROUP \
-            -n $APP_NAME \
-            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
 
           echo "Successfully updated Function App settings"
 
