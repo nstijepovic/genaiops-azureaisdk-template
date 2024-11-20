@@ -20,8 +20,6 @@ def enable_telemetry():
         conn_str=os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential()
     )
     
-    
-        
     application_insights_connection_string = project.telemetry.get_connection_string()
     
     if not application_insights_connection_string:
