@@ -292,6 +292,17 @@ jobs:
         with:
           step_name: "Execute online evaluation"
           script_parameter: |
+            echo "Repository root contents:"
+            ls -R
+            
+            echo -e "\nDetailed file listing with sizes:"
+            find . -type f -exec ls -lh {} \;
+            
+            echo -e "\nFile count by extension:"
+            find . -type f | sed 's/.*\.//' | sort | uniq -c | sort -nr
+            
+            echo -e "\nTotal repository size:"
+            du -sh .
             REPO_ROOT="/home/runner/work/genaiops-azureaisdk-template/genaiops-azureaisdk-template"
             cd $REPO_ROOT
             touch ${{ inputs.use_case_base_path }}/__init__.py
