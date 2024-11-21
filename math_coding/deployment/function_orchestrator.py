@@ -30,7 +30,7 @@ def enable_telemetry():
     os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = "True"
 
     project = AIProjectClient.from_connection_string(
-        conn_str=os.environ["CONNECTION_STRING"], credential=DefaultAzureCredential()
+        conn_str=f"{os.environ['CONNECTION_STRING']}", credential=DefaultAzureCredential()
     )
     
     application_insights_connection_string = project.telemetry.get_connection_string()
