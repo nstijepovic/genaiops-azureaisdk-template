@@ -292,6 +292,7 @@ jobs:
         with:
           step_name: "Execute online evaluation"
           script_parameter: |
+            echo $PWD
             python -m ${{ inputs.use_case_base_path }}.online_evaluations.online_eval \
             --environment_name ${{ inputs.env_name }} \
             --base_path ${{ inputs.use_case_base_path }} 
