@@ -15,6 +15,7 @@ sys.path.append(current_dir)
 from orchestration.python.pure_python_flow import get_math_response
 
 
+
 def eval_run_eval(
         name,
         data_path,
@@ -24,10 +25,12 @@ def eval_run_eval(
     """
     Evaluate the model using the given data and column mapping.
     """
+    print(os.environ["CONNECTION_STRING"])
     project = AIProjectClient.from_connection_string(
         conn_str=os.environ["CONNECTION_STRING"],
         credential=DefaultAzureCredential()
     )
+    print(project.scope)
     f1score = F1ScoreEvaluator()
     result = evaluate(
         data=data_path,
