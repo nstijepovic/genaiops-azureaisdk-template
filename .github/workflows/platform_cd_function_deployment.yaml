@@ -292,22 +292,5 @@ jobs:
         with:
           step_name: "Execute online evaluation"
           script_parameter: |
-            echo "Repository root contents:"
-            ls -R
-            
-            echo -e "\nDetailed file listing with sizes:"
-            find . -type f -exec ls -lh {} \;
-            
-            echo -e "\nFile count by extension:"
-            find . -type f | sed 's/.*\.//' | sort | uniq -c | sort -nr
-            
-            echo -e "\nTotal repository size:"
-            du -sh .
-            REPO_ROOT="/home/runner/work/genaiops-azureaisdk-template/genaiops-azureaisdk-template"
-            cd $REPO_ROOT
-            touch ${{ inputs.use_case_base_path }}/__init__.py
-            touch ${{ inputs.use_case_base_path }}/online_evaluations/__init__.py
-            export PYTHONPATH=$REPO_ROOT:$PYTHONPATH
-            python -c "import sys; sys.path.insert(0, '$REPO_ROOT'); import ${{ inputs.use_case_base_path }}.online_evaluations.online_eval"
-            PYTHONPATH=$REPO_ROOT:$PYTHONPATH python -m ${{ inputs.use_case_base_path }}.online_evaluations.online_eval --environment_name ${{ inputs.env_name }} --base_path ${{ inputs.use_case_base_path }}
+            python -m ${{ inputs.use_case_base_path }}.online_evaluations.online_eval --environment_name ${{ inputs.env_name }} --base_path ${{ inputs.use_case_base_path }}
             
