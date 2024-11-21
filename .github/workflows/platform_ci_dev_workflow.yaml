@@ -106,10 +106,10 @@ jobs:
       # used automatic (serverless) runtime by default
       # writes the RUN ID in run_id.txt file. Used in next step
       #=====================================
-      - name: Execute prompt flow bulk run
+      - name: Execute evaluation
         uses: ./.github/actions/execute_script
         with:
-          step_name: "Execute prompt flow bulk run"
+          step_name: "Execute evaluation"
           script_parameter: |
             python -m llmops.eval_experiments \
             --environment_name ${{ inputs.env_name }} \

@@ -287,11 +287,11 @@ jobs:
           done < <(jq -c '.[]' "$input_file")
 
 
-      - name: Execute prompt flow bulk run
+      - name: Execute online evaluation
         uses: ./.github/actions/execute_script
         with:
-          step_name: "Execute prompt flow bulk run"
+          step_name: "Execute online evaluation"
           script_parameter: |
-            python -m ${{ inputs.use_case_base_path }}.online_eval.online_eval \
+            python -m ${{ inputs.use_case_base_path }}.online_evaluations.online_eval \
             --environment_name ${{ inputs.env_name }} \
             --base_path ${{ inputs.use_case_base_path }} 
