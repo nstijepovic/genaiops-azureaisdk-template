@@ -34,7 +34,7 @@ def prepare_and_execute(
     """ 
     Prepare
     """
-    load_dotenv()
+    load_dotenv(override=True)
 
     experiment = load_experiment(
         filename=exp_filename, base_path=base_path, env=env_name

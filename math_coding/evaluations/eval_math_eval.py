@@ -27,7 +27,7 @@ def eval_run_eval(
     """
     print(os.environ["CONNECTION_STRING"])
     project = AIProjectClient.from_connection_string(
-        conn_str=os.environ["CONNECTION_STRING"],
+        conn_str=f"{os.environ['CONNECTION_STRING']}",
         credential=DefaultAzureCredential()
     )
     print(project.scope)
