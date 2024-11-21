@@ -153,8 +153,7 @@ if __name__ == "__main__":
         required=True,
         help="output folder path",
     )
-    parser.add_argument("--deploy_traces", default=False, action="store_true")
-    parser.add_argument("--visualize", default=False, action="store_true")
+
     args = parser.parse_args()
 
     prepare_and_execute(
