@@ -49,7 +49,7 @@ def prepare_and_execute(
 
     orchestration_entry_point = experiment.entry_point
     orchestration_connections = experiment.connections
-    print(experiment.resolved_env_vars)
+
     set_environment_variables(experiment.resolved_env_vars)
 
     if report_dir:
@@ -61,8 +61,10 @@ def prepare_and_execute(
             base_path, evaluator.flow
         )
         evaluator.resolve_variables()
-        print(evaluator.resolved_env_vars)
+
         set_environment_variables(evaluator.resolved_env_vars)
+        print(os.environ["PROMPTY_FILE"])
+
         evaluator_entry_point = evaluator.entry_point
 
         service_module = None

@@ -8,6 +8,8 @@ connections_ref:
 env_vars:
   - env_var1: "value1"
   - env_var2: ${GPT4O_API_KEY}
+  - PROMPTY_FILE: another_template.prompty
+
 
 connections:
   - name: aoai
@@ -50,7 +52,6 @@ evaluators:
     - env_var3: "value1"
     - env_var4: ${GPT4O_API_KEY}
     - ENABLE_TELEMETRY: True
-    - PROMPTY_FILE: another_template.prompty
   datasets:
     - name: math_coding_test
       source: data/math_data.jsonl
