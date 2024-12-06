@@ -38,10 +38,15 @@ resource "azurerm_linux_function_app" "simpleapp_app" {
     application_stack {
       python_version = "3.11"
     }
+    cors {
+      allowed_origins = ["https://ms.portal.azure.com"]
+    }
   }
   app_settings = {
     APPLICATIONINSIGHTS_CONNECTION_STRING = "${azurerm_application_insights.ai.connection_string}"
   }
+
+
   // Ignore changes to these app settings to prevent Terraform from overwriting them
   // after the function app code is deployed. These settings reference the code location.
   lifecycle { 
@@ -58,7 +63,7 @@ resource "azurerm_role_assignment" "function_app_storage_blob_data_contributor" 
 }
 
 resource "azurerm_role_assignment" "function_app_ai_project_ds" {
-  scope                = azurerm_storage_account.simpleapp_storage.id
+  scope                = azapi_resource.project.id
   role_definition_name = "AzureML Data Scientist"
   principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
 }

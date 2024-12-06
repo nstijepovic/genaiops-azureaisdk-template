@@ -65,7 +65,7 @@ resource "azapi_resource" "AIServicesResource" {
       name = var.sku
     }
     properties = {
-      customSubDomainName = "mycustomdomain"
+      customSubDomainName = "${random_pet.rg_name.id}domain"
       apiProperties = {
         statisticsEnabled = false
       }
