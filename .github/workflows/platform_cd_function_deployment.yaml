@@ -203,7 +203,7 @@ jobs:
           az functionapp deployment source config-zip \
             -g $RESOURCE_GROUP \
             -n $APP_NAME \
-            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true
+            --src genai_temp/${{ inputs.use_case_base_path }}/function_deploy.zip --build-remote true --debug
 
           if [ -z "$SECRETS_CONTEXT" ]; then
             echo "Error: SECRETS_CONTEXT environment variable is required"

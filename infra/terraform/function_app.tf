@@ -36,7 +36,7 @@ resource "azurerm_linux_function_app" "simpleapp_app" {
   }
   site_config {
     application_stack {
-      node_version = 20
+      python_version = "3.11"
     }
   }
   app_settings = {
@@ -57,7 +57,11 @@ resource "azurerm_role_assignment" "function_app_storage_blob_data_contributor" 
   principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
 }
 
-
+resource "azurerm_role_assignment" "function_app_ai_project_ds" {
+  scope                = azurerm_storage_account.simpleapp_storage.id
+  role_definition_name = "AzureML Data Scientist"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
 
 output "simpleapp_app_url" {
   value = azurerm_linux_function_app.simpleapp_app.default_hostname
