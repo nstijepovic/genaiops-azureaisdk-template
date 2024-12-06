@@ -99,7 +99,10 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
-
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup 
 # SageMath parsed files
 *.sage.py
 .vscode

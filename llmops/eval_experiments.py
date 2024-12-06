@@ -4,6 +4,7 @@ import importlib
 import inspect
 import os
 import sys
+import asyncio
 from typing import Optional
 
 from dotenv import load_dotenv
@@ -115,21 +116,29 @@ def prepare_and_execute(
                             service_module,
                             function_name
                             )
+                        
                         for ds in evaluator.datasets:
                             
                             timestamp = datetime.datetime.now().strftime(
                                 "%Y%m%d_%H%M%S"
                                 )
-
-                            result = service_function(
-                                f"{experiment_name}_eval_{timestamp}",
-                                os.path.join(
-                                    base_path,
-                                    ds.source
-                                ),
-                                ds.mappings,
-                                report_dir
-                            )
+                            if inspect.iscoroutinefunction(service_function):
+                                result = asyncio.run(service_function(
+                                    f"{experiment_name}_eval_{timestamp}",
+                                    os.path.join(base_path, ds.source),
+                                    ds.mappings,
+                                    report_dir
+                                ))
+                            else:
+                                result = service_function(
+                                    f"{experiment_name}_eval_{timestamp}",
+                                    os.path.join(
+                                        base_path,
+                                        ds.source
+                                    ),
+                                    ds.mappings,
+                                    report_dir
+                                )
 
 
                             print(result)
