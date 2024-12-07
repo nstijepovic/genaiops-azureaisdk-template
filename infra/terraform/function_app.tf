@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "simpleapp_storage" {
-  name                     = "simpleappstorageaccount"
+  name                     = "${var.prefix}function${random_string.suffix.result}"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -65,6 +65,24 @@ resource "azurerm_role_assignment" "function_app_storage_blob_data_contributor" 
 resource "azurerm_role_assignment" "function_app_ai_project_ds" {
   scope                = azapi_resource.project.id
   role_definition_name = "AzureML Data Scientist"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
+resource "azurerm_role_assignment" "function_app_ai_hub_ds" {
+  scope                = azapi_resource.hub.id
+  role_definition_name = "AzureML Data Scientist"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
+resource "azurerm_role_assignment" "function_app_this_app_insights" {
+  scope                = azurerm_application_insights.ai.id
+  role_definition_name = "Owner"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
+resource "azurerm_role_assignment" "function_app_ai_foundry_app_insights" {
+  scope                = azurerm_application_insights.default.id
+  role_definition_name = "Log Analytics Contributor"
   principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
 }
 

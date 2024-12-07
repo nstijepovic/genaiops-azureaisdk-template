@@ -148,9 +148,6 @@ resource "azurerm_role_assignment" "ai_project_owner" {
 }
 
 
-
-
-
 resource "azurerm_role_assignment" "ai_hub_contributor_storage" {
   scope                = azurerm_storage_account.default.id
   role_definition_name = "Contributor"
@@ -162,4 +159,11 @@ resource "azurerm_role_assignment" "app_insights_hub_storage_blob_data_contribut
   role_definition_name = "Contributor"
   principal_id         = azapi_resource.hub.identity[0].principal_id
 }
+
+resource "azurerm_role_assignment" "ai_project_contributor_storage" {
+  scope                = azurerm_storage_account.default.id
+  role_definition_name = "Contributor"
+  principal_id         = azapi_resource.project.identity[0].principal_id
+}
+
 
