@@ -77,7 +77,7 @@ resource "azapi_resource" "AIServicesResource" {
 
 // Azure AI Hub
 resource "azapi_resource" "hub" {
-  type = "Microsoft.MachineLearningServices/workspaces@2024-10-01"
+  type = "Microsoft.MachineLearningServices/workspaces@2024-07-01-preview"
   name = "${random_pet.rg_name.id}-aih"
   location = azurerm_resource_group.rg.location
   parent_id = azurerm_resource_group.rg.id
@@ -94,6 +94,7 @@ body = {
       keyVault = azurerm_key_vault.default.id
       applicationInsights = azurerm_application_insights.default.id
       containerRegistry = azurerm_container_registry.default.id
+      systemDatastoresAuthMode = var.data_storage_access_type
     }
     kind = "hub"
 }
@@ -146,7 +147,6 @@ resource "azurerm_role_assignment" "ai_project_owner" {
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
 }
-
 
 resource "azurerm_role_assignment" "ai_hub_contributor_storage" {
   scope                = azurerm_storage_account.default.id
