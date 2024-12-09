@@ -77,7 +77,7 @@ resource "azapi_resource" "AIServicesResource" {
 
 // Azure AI Hub
 resource "azapi_resource" "hub" {
-  type = "Microsoft.MachineLearningServices/workspaces@2024-07-01-preview"
+  type = "Microsoft.MachineLearningServices/workspaces@2024-10-01"
   name = "${random_pet.rg_name.id}-aih"
   location = azurerm_resource_group.rg.location
   parent_id = azurerm_resource_group.rg.id
@@ -94,7 +94,6 @@ body = {
       keyVault = azurerm_key_vault.default.id
       applicationInsights = azurerm_application_insights.default.id
       containerRegistry = azurerm_container_registry.default.id
-      systemDatastoresAuthMode = var.data_storage_access_type
     }
     kind = "hub"
 }
