@@ -108,7 +108,7 @@ terraform.tfstate.backup
 *.sage.py
 .vscode
 # Environments
-function_package
+function_package/
 function_package.zip
 .env
 *.env

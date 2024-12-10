@@ -66,8 +66,11 @@ class ExperimentCloudConfig:
         self.subscription_id = subscription_id or _get_optional_env_var(
             "SUBSCRIPTION_ID"
         )
-        self.resource_group_name = resource_group_name or _get_optional_env_var(
-            "RESOURCE_GROUP_NAME"
+        self.resource_group_name = (
+            resource_group_name
+            or _get_optional_env_var(
+                "RESOURCE_GROUP_NAME"
+            )
         )
         self.project_name = project_name or _get_optional_env_var(
             "PROJECT_NAME"

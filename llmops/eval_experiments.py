@@ -1,22 +1,23 @@
 import argparse
+import asyncio
 import datetime
 import importlib
 import inspect
 import os
 import sys
-import asyncio
 from typing import Optional
 
 from dotenv import load_dotenv
 
 from llmops.experiment import load_experiment
 
+
 def set_environment_variables(env_dict):
     """
     Set environment variables from a dictionary.
-    
+
     Args:
-        env_dict (dict): Dictionary containing environment variable names and values
+        env_dict (dict): Dictionary for env variable names and values
     """
     for key, value in env_dict.items():
         os.environ[key] = str(value)
@@ -27,13 +28,11 @@ def set_environment_variables(env_dict):
 def prepare_and_execute(
     exp_filename: Optional[str] = None,
     base_path: Optional[str] = None,
-    subscription_id: Optional[str] = None,
-    build_id: Optional[str] = None,
     env_name: Optional[str] = None,
     report_dir: Optional[str] = None,
 ):
-    """ 
-    Prepare
+    """
+    Prepare and execute the evaluations for the given experiment.
     """
     load_dotenv(override=True)
 
@@ -43,13 +42,6 @@ def prepare_and_execute(
     experiment_name = experiment.name
 
     eval_flows = experiment.evaluators
-
-    orchestration_path = os.path.join(
-        base_path, experiment.flow
-    )
-
-    orchestration_entry_point = experiment.entry_point
-    orchestration_connections = experiment.connections
 
     set_environment_variables(experiment.resolved_env_vars)
 
@@ -65,8 +57,6 @@ def prepare_and_execute(
 
         set_environment_variables(evaluator.resolved_env_vars)
         print(os.environ["PROMPTY_FILE"])
-
-        evaluator_entry_point = evaluator.entry_point
 
         service_module = None
         for file in os.listdir(evaluator_path):
@@ -86,7 +76,9 @@ def prepare_and_execute(
                     base_path, experiment.flow
                     )
                 sys.path.append(dependent_modules_dir)
-                current_dir = os.path.dirname(os.path.abspath(__file__))  # evaluations folder
+                
+                # evaluations folder
+                current_dir = os.path.dirname(os.path.abspath(__file__))
                 parent_dir = os.path.dirname(current_dir)  # math_coding folder
                 sys.path.insert(0, parent_dir)
 
@@ -139,8 +131,6 @@ def prepare_and_execute(
                                     ds.mappings,
                                     report_dir
                                 )
-
-
                             print(result)
 
 

@@ -7,21 +7,20 @@ from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
 load_dotenv()
-current_dir = os.path.dirname(os.path.abspath(__file__))  
-parent_dir = os.path.dirname(current_dir)  
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 sys.path.append(current_dir)
 
 from orchestration.python.pure_python_flow import get_math_response
 
 
-
 def eval_run_eval(
         name,
         data_path,
         column_mapping,
-        output_path 
-    ):
+        output_path
+        ):
     """
     Evaluate the model using the given data and column mapping.
     """
@@ -45,6 +44,6 @@ def eval_run_eval(
             }
         },
         azure_ai_project=project.scope,
-        output_path=f"{output_path}/{name}.json",
+        output_path=f"{output_path}/{name}.json"
     )
     return result

@@ -86,7 +86,9 @@ async def get_math_response(question):
         key = os.environ["AZURE_AI_CHAT_KEY"]
         prompty_file = os.environ["PROMPTY_FILE"]
     except KeyError:
-        print("Missing environment variable 'AZURE_AI_CHAT_ENDPOINT' or 'AZURE_AI_CHAT_KEY'")
+        print(
+            "Missing environment variable 'AZURE_AI_CHAT_ENDPOINT' or 'AZURE_AI_CHAT_KEY'"
+        )
         print("Set them before running this sample.")
         exit()
 
@@ -94,7 +96,10 @@ async def get_math_response(question):
     prompt_template = PromptTemplate.from_prompty(file_path=path)
     
     messages = prompt_template.create_messages(question=question)
-    client = ChatCompletionsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+    client = ChatCompletionsClient(
+        endpoint=endpoint,
+        credential=AzureKeyCredential(key)
+    )
 
     code = client.complete(
         messages=messages,
@@ -109,7 +114,6 @@ async def get_math_response(question):
 
 
 if __name__ == "__main__":
-    """Test the math response"""
-    question = "what is 10 + 20?"
-    result = asyncio.run( get_math_response(question))
+    QUESTION = "what is 10 + 20?"
+    result = asyncio.run(get_math_response(QUESTION))
     print(result)
