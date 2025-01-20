@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "simpleapp_storage" {
-  name                     = "${var.prefix}function${random_string.suffix.result}"
+  name                     = "funcstorage${random_string.suffix.result}"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -7,7 +7,7 @@ resource "azurerm_storage_account" "simpleapp_storage" {
 }
 
 resource "azurerm_application_insights" "ai" {
-  name                = "${azurerm_resource_group.rg.name}ai"
+  name                = "func${azurerm_resource_group.rg.name}"
   location            =azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   application_type    = "web"
