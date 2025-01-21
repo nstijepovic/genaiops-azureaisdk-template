@@ -231,7 +231,7 @@ jobs:
 
           sleep 10
 
-          az functionapp restart --name $APP_NAME --resource_group $RESOURCE_GROUP
+          az functionapp restart --name $APP_NAME --resource-group $RESOURCE_GROUP
 
           sleep 10
 
