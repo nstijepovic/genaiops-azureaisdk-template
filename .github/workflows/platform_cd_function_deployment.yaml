@@ -229,6 +229,15 @@ jobs:
 
           echo "Successfully updated Function App settings"
 
+          sleep 10
+
+          az functionapp restart --name $APP_NAME --resource_group $RESOURCE_GROUP
+
+          sleep 10
+
+          echo "Successfully restarted Function App settings"
+
+
       - name: Invoke Azure function
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
