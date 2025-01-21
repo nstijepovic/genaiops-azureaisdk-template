@@ -102,7 +102,7 @@ body = {
 // Azure AI Project
 resource "azapi_resource" "project" {
   type = "Microsoft.MachineLearningServices/workspaces@2024-10-01"
-  name = "my-ai-project${random_string.suffix.result}"
+  name = "ai-project${random_string.suffix.result}"
   location = azurerm_resource_group.rg.location
   parent_id = azurerm_resource_group.rg.id
 
