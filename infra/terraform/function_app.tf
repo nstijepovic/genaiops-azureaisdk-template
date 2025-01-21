@@ -68,11 +68,42 @@ resource "azurerm_role_assignment" "function_app_ai_project_ds" {
   principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
 }
 
+resource "azurerm_role_assignment" "function_app_ai_project_file" {
+  scope                = azapi_resource.project.id
+  role_definition_name = "Storage File Data Privileged Contributor"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
+resource "azurerm_role_assignment" "function_app_ai_project_table" {
+  scope                = azapi_resource.project.id
+  role_definition_name = "Storage Table Data Contributor"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
+resource "azurerm_role_assignment" "function_app_ai_project_cont" {
+  scope                = azapi_resource.project.id
+  role_definition_name = "Storage Account Contributor"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
 resource "azurerm_role_assignment" "function_app_ai_hub_ds" {
   scope                = azapi_resource.hub.id
   role_definition_name = "AzureML Data Scientist"
   principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
 }
+
+resource "azurerm_role_assignment" "function_app_ai_hub_blob" {
+  scope                = azapi_resource.hub.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
+resource "azurerm_role_assignment" "function_app_ai_hub_file" {
+  scope                = azapi_resource.hub.id
+  role_definition_name = "Storage File Data Privileged Contributor"
+  principal_id         = azurerm_linux_function_app.simpleapp_app.identity.0.principal_id
+}
+
 
 resource "azurerm_role_assignment" "function_app_this_app_insights" {
   scope                = azurerm_application_insights.ai.id

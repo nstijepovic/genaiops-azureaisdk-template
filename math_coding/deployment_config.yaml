@@ -1,9 +1,9 @@
 name: math_coding
 description: "This is a math coding experiment"
 type: function_app
-resource_group: rg-enhanced-gobbler
-service_name: rg-enhanced-gobbler
-app_name: rg-enhanced-gobbler
+resource_group: rg-desired-kid
+service_name: rg-desired-kid
+app_name: rg-desired-kid
 function_name: process_math
 runtime: python
 version: 3.11
