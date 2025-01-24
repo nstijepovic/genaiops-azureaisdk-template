@@ -1,19 +1,14 @@
+
 import os
-import sys
 
 from azure.ai.evaluation import F1ScoreEvaluator, evaluate
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
+from math_coding.orchestration.python.pure_python_flow import get_math_response
+
 load_dotenv()
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
-sys.path.append(current_dir)
-
-from orchestration.python.pure_python_flow import get_math_response
-
 
 def eval_run_eval(
         name,

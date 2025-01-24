@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genaiops"
+version = "0.1.0"
+authors = [{ name = "Ritesh Modi", email = "ritesh.modi@microsoft.com" }]
+description = "genaiops using ai foundry"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    # List your dependencies here
+]
+
+[tool.setuptools]
+packages = ["llmops", "tests", "math_coding", "math_coding_async"]
+include-package-data = true

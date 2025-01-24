@@ -52,8 +52,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r .github/requirements/execute_job_requirements.txt -U
-          #python -m pip install .github/workflows/azure_ai_projects-1.0.0b1-py3-none-any.whl -U --force-reinstall
-          #python -m pip install .github/workflows/azure_ai_inference-1.0.0b5-py3-none-any.whl -U --force-reinstall
+          pip install -e . 
             
       - name: Install js-yaml
         run: |
@@ -74,16 +73,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install jq
-  
-      - name: Install yq
-        run: |
           VERSION="v4.40.5"  # Specify the version you want
           BINARY="yq_linux_amd64"
           wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
           tar xz && sudo mv ${BINARY} /usr/bin/yq
-            
-      - name: Verify installations
-        run: |
           jq --version
           yq --version
 
