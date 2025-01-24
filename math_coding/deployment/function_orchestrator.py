@@ -1,31 +1,34 @@
+"""Main function orchestrator for the math_coding Azure Function app"""
 import logging
 import os
 import azure.functions as func
 import json
-from typing import Dict, Any
+from typing import Any
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 from azure.monitor.opentelemetry import configure_azure_monitor
-#from azure.ai.inference.tracing import AIInferenceInstrumentor
 
 # Blueprint creation
 bp = func.Blueprint()
 
-_is_initialized = False
+_IS_INITIALIZED = False
+
 
 def initialize_once():
     """Run startup code only once"""
-    global _is_initialized
-    if not _is_initialized:
+    global _IS_INITIALIZED
+    if not _IS_INITIALIZED:
         logging.info("Running startup initialization...")
         
-        _is_initialized = True
+        _IS_INITIALIZED = True
+
 
 # Run initialization when module loads
 initialize_once()
 
-def enable_telemetry():
 
+def enable_telemetry():
+    """Enable telemetry logging"""
     # enable logging message contents
     os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = "True"
 
@@ -37,10 +40,12 @@ def enable_telemetry():
     
     if not application_insights_connection_string:
         logging.warning(
-            "No application insights configured, telemetry will not be logged to project. Add application insights at:"
+            "No app insights configured, telemetry will not be logged."
         )
     project.telemetry.enable()
-    configure_azure_monitor(connection_string=application_insights_connection_string)
+    configure_azure_monitor(
+        connection_string=application_insights_connection_string
+        )
     logging.info("Enabled telemetry logging to project, view traces at:")
 
 
@@ -68,9 +73,11 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
             from . import pure_python_flow
             result = pure_python_flow.get_math_response(question)
         except ImportError as ie:
-            logging.error(f"Failed to import pure_python_flow: {str(ie)}")
+            logging.error("Failed to import pure_python_flow: %s", str(ie))
             return func.HttpResponse(
-                body=json.dumps({"error": "Business logic module not available"}),
+                body=json.dumps(
+                    {"error": "Business logic module not available"}
+                ),
                 mimetype="application/json",
                 status_code=500
             )
@@ -88,11 +95,17 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="application/json",
             status_code=400
         )
-    except Exception as e:
-        logging.error(f"Unexpected error: {str(e)}")
+    except ImportError as ie:
+        logging.error("Import error: %s", str(ie))
         return func.HttpResponse(
             body=json.dumps({"error": "Internal server error"}),
             mimetype="application/json",
             status_code=500
         )
-#
+    except KeyError as ke:
+        logging.error("Key error: %s", str(ke))
+        return func.HttpResponse(
+            body=json.dumps({"error": "Internal server error"}),
+            mimetype="application/json",
+            status_code=500
+        )

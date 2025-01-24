@@ -1,38 +1,36 @@
 import os
-from azure.ai.projects import AIProjectClient 
-from azure.identity import DefaultAzureCredential 
-from azure.ai.projects.models import ( 
+import argparse
+import yaml
+
+from azure.ai.projects import AIProjectClient
+from azure.identity import DefaultAzureCredential
+from azure.ai.projects.models import (
     ApplicationInsightsConfiguration,
     EvaluatorConfiguration,
     EvaluationSchedule,
     RecurrenceTrigger,
+    ConnectionType
 )
-from azure.ai.projects.models import EvaluatorConfiguration, ConnectionType
-import argparse
-import yaml
+
 from dotenv import load_dotenv
-from llmops.experiment import load_experiment
 
 
 def prepare_and_execute(
     base_path,
     env_name,
 ):
-    
+    """
+    Prepare and execute the online evaluation schedule.
+    """
     load_dotenv()
 
-    experiment = load_experiment(
-        filename="experiment.yaml", base_path=base_path, env=env_name
-    )
-
-    with open(f'{base_path}/online_evaluation_config.yaml', 'r') as file:
+    with open(f'{base_path}/online_evaluation_config.yaml', 'r', encoding='utf-8') as file:
         data = yaml.safe_load(file)
-
 
     # Name of your online evaluation schedule
     SCHEDULE_NAME = data["schedule_name"]
 
-    # Name of your generative AI application (will be available in trace data in Application Insights)
+    # Name of your gen AI app (will be available in trace data in app insights)
     SERVICE_NAME = data["service_name"]
 
     # Your Application Insights resource ID
@@ -67,7 +65,7 @@ def prepare_and_execute(
     deployment_name = data["deployment_name"]
     api_version = data["deployment_api_version"]
 
-    # This is your AOAI connection name, which can be found in your AI Studio project under the 'Models + Endpoints' tab
+    # This is your llm connection name from AI Studio project
     default_connection = project_client.connections.get_default(connection_type=ConnectionType.AZURE_OPEN_AI)
 
     model_config = {
@@ -77,10 +75,7 @@ def prepare_and_execute(
         "azure_endpoint": default_connection.endpoint_url
     }
 
-
-
     # Configure your evaluators 
-
     # RelevanceEvaluator
     # id for each evaluator can be found in your AI Studio registry - please see documentation for more information
     # init_params is the configuration for the model to use to perform the evaluation
@@ -101,7 +96,7 @@ def prepare_and_execute(
 
     name = SCHEDULE_NAME
     description = f"{SCHEDULE_NAME} description"
-    # AzureMSIClientId is the clientID of the User-assigned managed identity created during set-up - see documentation for how to find it
+    # AzureMSIClientId is the clientID of the User-assigned managed identity
     properties = {"AzureMSIClientId": os.environ["USER_CLIENT_ID"]}
     print(os.environ["USER_CLIENT_ID"])
     # Configure the online evaluation schedule
@@ -116,6 +111,7 @@ def prepare_and_execute(
     created_evaluation_schedule = project_client.evaluations.create_or_replace_schedule(name, evaluation_schedule)
 
     print(created_evaluation_schedule)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("config_parameters")

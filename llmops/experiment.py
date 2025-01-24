@@ -63,6 +63,7 @@ class Evaluator:
     connections: List[Connection]  # Changed from List[str] to List[Connection]
     env_vars: List[Dict[str, str]]
     datasets: List[DatasetMapping]
+    resolved_env_vars: Dict[str, str] = field(default_factory=dict)
 
     def resolve_variables(self) -> None:
         """Resolve all variables in the experiment configuration."""
@@ -82,19 +83,27 @@ class Evaluator:
                     if var_name in env_vars:
                         self.resolved_env_vars[key] = env_vars[var_name]
                     else:
-                        raise ValueError(f"Environment variable {var_name} not found")
+                        raise ValueError(
+                            f"Environment variable {var_name} not found"
+                        )
                 else:
                     self.resolved_env_vars[key] = value
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any], connections_map: Dict[str, Connection]) -> 'Evaluator':
-        # Expand connections from connection names to actual Connection objects
+    def from_dict(
+        cls, data: Dict[str, Any], connections_map: Dict[str, Connection]
+    ) -> 'Evaluator':
+        """Expand connections from connection names to Connection objects."""
         expanded_connections = []
         for conn_name in data['connections_ref']:
             if conn_name in connections_map:
-                expanded_connections.append(deepcopy(connections_map[conn_name]))
+                expanded_connections.append(
+                    deepcopy(connections_map[conn_name])
+                )
             else:
-                raise ValueError(f"Connection {conn_name} not found in connections map")
+                raise ValueError(
+                    f"Connection {conn_name} not found in connections map"
+                )
 
         return cls(
             name=data['name'],
@@ -123,6 +132,7 @@ class Experiment:
     env_vars: List[Dict[str, str]]
     description: Optional[str] = None
     evaluators: List[Evaluator] = field(default_factory=list)
+    resolved_env_vars: Dict[str, str] = field(default_factory=dict)
 
     @staticmethod
     def deep_merge(
@@ -131,7 +141,7 @@ class Experiment:
     ) -> Dict[str, Any]:
         """Deep merge two dictionaries, with override taking precedence."""
         result = deepcopy(base)
-        
+
         for key, value in override.items():
             if key in result and isinstance(result[key], dict) and isinstance(
                 value,
@@ -181,14 +191,14 @@ class Experiment:
     def load_config(cls,
                     base_path: Union[str, Path],
                     dev_path: Optional[Union[str, Path]] = None
-                ) -> Dict[str, Any]:
+                    ) -> Dict[str, Any]:
         """Load and merge configuration from base and dev YAML files."""
-        with open(base_path, 'r') as f:
+        with open(base_path, 'r', encoding='utf-8') as f:
             base_config = yaml.safe_load(f)
 
         if dev_path:
             try:
-                with open(dev_path, 'r') as f:
+                with open(dev_path, 'r', encoding='utf-8') as f:
                     dev_config = yaml.safe_load(f) or {}
                 return cls.deep_merge(base_config, dev_config)
             except FileNotFoundError:
@@ -213,8 +223,8 @@ class Experiment:
         # Expand connections in main experiment config
         expanded_connections = []
         for conn_name in config['connections_ref']:
-             # Handle case where connection might already be expanded
-            if isinstance(conn_name, str): 
+            # Handle case where connection might already be expanded
+            if isinstance(conn_name, str):
                 if conn_name in connections_map:
                     expanded_connections.append(
                         deepcopy(

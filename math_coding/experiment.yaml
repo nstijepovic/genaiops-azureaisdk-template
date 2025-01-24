@@ -42,7 +42,7 @@ connections:
     deployment_name: ${GPT4O_DEPLOYMENT_NAME}
 
 evaluators:
-- name: math_evaluation_flow
+- name: eval_f1_score
   flow: evaluations
   entry_point: pure_python_flow:get_math_response
   connections_ref:

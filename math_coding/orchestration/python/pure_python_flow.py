@@ -1,3 +1,4 @@
+"""Orchestation script for math_coding."""
 import ast
 import json
 import os
@@ -55,13 +56,14 @@ def code_refine(original_code: str) -> str:
         return fixed_code
     except json.JSONDecodeError:
         return "JSONDecodeError"
-    except Exception as e:
+    except (SyntaxError, ValueError, TypeError) as e:
         return "Unknown Error:" + str(e)
 
 
 def func_exe(code_snippet: str):
     """Execute the code snippet and return the result"""
-    if code_snippet == "JSONDecodeError" or code_snippet.startswith("Unknown Error:"):
+    if (code_snippet == "JSONDecodeError" or
+            code_snippet.startswith("Unknown Error:")):
         return code_snippet
 
     # Define the result variable before executing the code snippet
@@ -71,7 +73,7 @@ def func_exe(code_snippet: str):
     # Execute the code snippet
     try:
         exec(code_snippet.lstrip())
-    except Exception as e:
+    except (SyntaxError, ValueError, TypeError) as e:
         sys.stdout = old_stdout
         return str(e)
 
@@ -86,15 +88,19 @@ def get_math_response(question):
         key = os.environ["AZURE_AI_CHAT_KEY"]
         prompty_file = os.environ["PROMPTY_FILE"]
     except KeyError:
-        print("Missing environment variable 'AZURE_AI_CHAT_ENDPOINT' or 'AZURE_AI_CHAT_KEY'")
+        print("Missing environment variable 'AZURE_AI_CHAT_ENDPOINT' or "
+              "'AZURE_AI_CHAT_KEY'")
         print("Set them before running this sample.")
         exit()
 
     path = f"./{prompty_file}"
     prompt_template = PromptTemplate.from_prompty(file_path=path)
-    
+
     messages = prompt_template.create_messages(question=question)
-    client = ChatCompletionsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+    client = ChatCompletionsClient(
+        endpoint=endpoint,
+        credential=AzureKeyCredential(key)
+        )
 
     code = client.complete(
         messages=messages,
@@ -103,12 +109,12 @@ def get_math_response(question):
     )
 
     code_refined = code_refine(code.choices[0].message.content)
-    result = func_exe(code_refined)
-    return {"response": result}
+    output = func_exe(code_refined)
+    return {"response": output}
 
 
 if __name__ == "__main__":
-    """Test the math response"""
-    question = "what is 10 + 20?"
-    result = get_math_response(question)
+    # Test the math response
+    QUESTION = "what is 10 + 20?"
+    result = get_math_response(QUESTION)
     print(result)
