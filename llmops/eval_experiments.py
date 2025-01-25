@@ -70,7 +70,7 @@ def prepare_and_execute(
                 os.makedirs(report_dir, exist_ok=True)
 
         for evaluator in eval_flows:
-            logger.info("Processing evaluator: %s", evaluator.flow)
+            logger.info("Processing evaluator: %s", evaluator.name)
             evaluator_path = os.path.join(
                 base_path, evaluator.flow
             )

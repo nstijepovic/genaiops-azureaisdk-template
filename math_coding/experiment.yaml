@@ -1,6 +1,6 @@
 name: math_coding
 description: "This is a math coding experiment"
-flow: orchestration/python
+flow: flows/math_code_generation
 entry_point: pure_python_flow:get_math_response
 connections_ref:
   - aoai
@@ -9,7 +9,6 @@ env_vars:
   - env_var1: "value1"
   - env_var2: ${GPT4O_API_KEY}
   - PROMPTY_FILE: another_template.prompty
-
 
 connections:
   - name: aoai

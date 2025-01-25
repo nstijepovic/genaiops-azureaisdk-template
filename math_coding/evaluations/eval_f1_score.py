@@ -6,10 +6,11 @@ from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
-from math_coding.orchestration.python.pure_python_flow import get_math_response
+from math_coding.flows.math_code_generation.pure_python_flow import (
+    get_math_response
+)
 
 load_dotenv()
-
 
 def eval_run_eval(
         name,
