@@ -218,10 +218,16 @@ if __name__ == "__main__":
         required=True,
         help="output folder path",
     )
+    parser.add_argument(
+        "--experiment_config_file",
+        type=str,
+        help="experiment config file name",
+    )
 
     args = parser.parse_args()
 
     prepare_and_execute(
+        exp_filename=args.experiment_config_file,
         base_path=args.base_path,
         env_name=args.environment_name,
         report_dir=args.report_dir

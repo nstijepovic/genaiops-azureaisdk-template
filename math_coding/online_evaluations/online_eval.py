@@ -1,3 +1,4 @@
+"""Online Evaluation script for math_coding."""    
 import os
 import argparse
 import yaml
@@ -35,7 +36,11 @@ def prepare_and_execute(
     SERVICE_NAME = data["service_name"]
 
     # Your Application Insights resource ID
-    APPLICATION_INSIGHTS_RESOURCE_ID = f"/subscriptions/{os.environ['SUBSCRIPTION_ID']}/resourceGroups/{os.environ['RESOURCE_GROUP_NAME']}/providers/microsoft.insights/components/{data['app_insights_name']}"
+    APPLICATION_INSIGHTS_RESOURCE_ID = (
+        f"/subscriptions/{os.environ['SUBSCRIPTION_ID']}/resourceGroups/"
+        f"{os.environ['RESOURCE_GROUP_NAME']}/providers/microsoft.insights/components/"
+        f"{data['app_insights_name']}"
+    )
 
     # Kusto Query Language (KQL) query to query data
     # from Application Insights resource
@@ -137,10 +142,12 @@ def prepare_and_execute(
         description=description,
         properties=properties)
 
-    # Create the online evaluation schedule 
-    created_evaluation_schedule = project_client.evaluations.create_or_replace_schedule(name, evaluation_schedule)
-
-    print(created_evaluation_schedule)
+    # Create the online evaluation schedule
+    evaluation_schedule = project_client.evaluations.create_or_replace_schedule(
+        name,
+        evaluation_schedule,
+    )
+    print(evaluation_schedule)
 
 
 if __name__ == "__main__":

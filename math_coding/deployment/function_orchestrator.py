@@ -1,12 +1,13 @@
 """Main function orchestrator for the math_coding Azure Function app"""
 import logging
 import os
-import azure.functions as func
 import json
-from typing import Any
+import azure.functions as func
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 from azure.monitor.opentelemetry import configure_azure_monitor
+
+from math_coding.flows.math_code_generation import pure_python_flow
 
 # Blueprint creation
 bp = func.Blueprint()
@@ -33,11 +34,12 @@ def enable_telemetry():
     os.environ["AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED"] = "True"
 
     project = AIProjectClient.from_connection_string(
-        conn_str=f"{os.environ['CONNECTION_STRING']}", credential=DefaultAzureCredential()
+        conn_str=os.environ["CONNECTION_STRING"],
+        credential=DefaultAzureCredential(),
     )
-    
+
     application_insights_connection_string = project.telemetry.get_connection_string()
-    
+
     if not application_insights_connection_string:
         logging.warning(
             "No app insights configured, telemetry will not be logged."
@@ -70,7 +72,6 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
 
         # 3. Import and execute business logic
         try:
-            from . import pure_python_flow
             result = pure_python_flow.get_math_response(question)
         except ImportError as ie:
             logging.error("Failed to import pure_python_flow: %s", str(ie))

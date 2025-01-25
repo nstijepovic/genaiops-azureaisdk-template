@@ -224,7 +224,9 @@ jobs:
 
           sleep 10
 
-          az functionapp restart --name $APP_NAME --resource-group $RESOURCE_GROUP
+          az functionapp stop --name $APP_NAME --resource-group $RESOURCE_GROUP
+          sleep 30  # Give it time to fully stop
+          az functionapp start --name $APP_NAME --resource-group $RESOURCE_GROUP
 
           sleep 10
 

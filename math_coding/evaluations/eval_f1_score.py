@@ -12,6 +12,7 @@ from math_coding.flows.math_code_generation.pure_python_flow import (
 
 load_dotenv()
 
+
 def eval_run_eval(
         name,
         data_path,
@@ -21,12 +22,12 @@ def eval_run_eval(
     """
     Evaluate the model using the given data and column mapping.
     """
-    print(os.environ["CONNECTION_STRING"])
+    
     project = AIProjectClient.from_connection_string(
         conn_str=f"{os.environ['CONNECTION_STRING']}",
         credential=DefaultAzureCredential()
     )
-    print(project.scope)
+    
     f1score = F1ScoreEvaluator()
     result = evaluate(
         data=data_path,
