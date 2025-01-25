@@ -7,7 +7,7 @@ from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 from azure.monitor.opentelemetry import configure_azure_monitor
 
-from math_coding.flows.math_code_generation import pure_python_flow
+
 
 # Blueprint creation
 bp = func.Blueprint()
@@ -72,6 +72,7 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
 
         # 3. Import and execute business logic
         try:
+            from . import pure_python_flow
             result = pure_python_flow.get_math_response(question)
         except ImportError as ie:
             logging.error("Failed to import pure_python_flow: %s", str(ie))
