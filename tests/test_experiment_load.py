@@ -1,3 +1,4 @@
+"""Tests for the load_experiment function."""
 from unittest.mock import patch, MagicMock
 import pytest
 from llmops.experiment import load_experiment
@@ -6,7 +7,7 @@ from llmops.experiment import Experiment
 
 @pytest.fixture
 def mock_experiment():
-    """Fixture providing a mock Experiment instance"""
+    """Fixture providing a mock Experiment instance."""
     experiment = MagicMock(spec=Experiment)
     experiment.resolve_variables = MagicMock()
     return experiment
@@ -23,7 +24,7 @@ def mock_files():
 
 
 def test_custom_base_and_filename(mock_experiment, tmp_path):
-    """Test with custom base path and filename"""
+    """Test with custom base path and filename."""
     with patch("os.path.exists") as mock_exists, \
          patch("llmops.experiment.Experiment.from_yaml") as mock_from_yaml:
 
@@ -42,7 +43,7 @@ def test_custom_base_and_filename(mock_experiment, tmp_path):
 
 
 def test_with_env_parameter(mock_experiment):
-    """Test environment-specific file handling"""
+    """Test environment-specific file handling."""
     with patch("os.path.exists") as mock_exists, \
          patch("llmops.experiment.Experiment.from_yaml") as mock_from_yaml, \
          patch("os.path.splitext") as mock_split:
@@ -60,7 +61,7 @@ def test_with_env_parameter(mock_experiment):
 
 
 def test_nonexistent_base_file():
-    """Test error handling for missing base file"""
+    """Test error handling for missing base file."""
     with patch("os.path.exists") as mock_exists:
         mock_exists.return_value = False
 
@@ -82,7 +83,7 @@ def test_invalid_filename():
 
 
 def test_env_file_not_exists(mock_experiment):
-    """Test handling of missing environment-specific file"""
+    """Test handling of missing environment-specific file."""
     with patch("os.path.exists") as mock_exists, \
          patch("llmops.experiment.Experiment.from_yaml") as mock_from_yaml, \
          patch("os.path.splitext") as mock_split:
@@ -98,7 +99,7 @@ def test_env_file_not_exists(mock_experiment):
 
 
 def test_integration_loaded_experiment():
-    """Test full integration with actual file loading"""
+    """Test full integration with actual file loading."""
     with patch("os.path.exists") as mock_exists, \
          patch("llmops.experiment.Experiment.from_yaml") as mock_from_yaml, \
          patch("os.path.splitext") as mock_split:

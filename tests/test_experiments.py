@@ -1,3 +1,4 @@
+"""Tests for Experiment class."""
 import pytest
 import yaml
 
@@ -6,7 +7,7 @@ from llmops.experiment import Experiment, Connection, Evaluator, DatasetMapping
 
 @pytest.fixture
 def sample_connection():
-    """Fixture providing a sample Connection object"""
+    """Fixture providing a sample Connection object."""
     return Connection(
         name="test_conn",
         connection_type="azure",
@@ -20,7 +21,7 @@ def sample_connection():
 
 @pytest.fixture
 def sample_config(tmp_path):
-    """Fixture providing sample experiment configurations"""
+    """Fixture providing sample experiment configurations."""
     base_config = {
         "name": "base_experiment",
         "flow": "base_flow",
@@ -70,24 +71,24 @@ def sample_config(tmp_path):
 
 
 class TestDeepMerge:
-    """Tests for deep_merge static method"""
+    """Tests for deep_merge static method."""
 
     def test_simple_merge(self):
-        """Test merging simple dictionaries"""
+        """Test merging simple dictionaries."""
         base = {"a": 1, "b": 2}
         override = {"b": 3, "c": 4}
         merged = Experiment.deep_merge(base, override)
         assert merged == {"a": 1, "b": 3, "c": 4}
 
     def test_nested_dict_merge(self):
-        """Test merging nested dictionaries"""
+        """Test merging nested dictionaries."""
         base = {"a": {"b": 1, "c": 2}}
         override = {"a": {"c": 3, "d": 4}}
         merged = Experiment.deep_merge(base, override)
         assert merged == {"a": {"b": 1, "c": 3, "d": 4}}
 
     def test_list_merge_by_name(self):
-        """Test merging lists with name field"""
+        """Test merging lists with name field."""
         base = {"items": [{"name": "a", "val": 1}, {"name": "b", "val": 2}]}
         override = {"items": [{"name": "a", "val": 3}, {"name": "c", "val": 4}]}
         merged = Experiment.deep_merge(base, override)
@@ -98,7 +99,7 @@ class TestDeepMerge:
         ]
 
     def test_non_dict_list_merge(self):
-        """Test merging lists without name field"""
+        """Test merging lists without name field."""
         base = {"items": [1, 2, 3]}
         override = {"items": [4, 5]}
         merged = Experiment.deep_merge(base, override)
@@ -106,10 +107,10 @@ class TestDeepMerge:
 
 
 class TestLoadConfig:
-    """Tests for load_config class method"""
+    """Tests for load_config class method."""
 
     def test_load_base_only(self, sample_config, tmp_path):
-        """Test loading base config file only"""
+        """Test loading base config file only."""
         base, _, tmp_path = sample_config
         base_path = tmp_path / "base.yaml"
         base_path.write_text(yaml.dump(base))
@@ -119,7 +120,7 @@ class TestLoadConfig:
         assert len(config["connections"]) == 1
 
     def test_load_with_dev(self, sample_config, tmp_path):
-        """Test loading base and development config files"""
+        """Test loading base and development config files."""
         base, dev, tmp_path = sample_config
         base_path = tmp_path / "base.yaml"
         dev_path = tmp_path / "dev.yaml"
@@ -132,7 +133,7 @@ class TestLoadConfig:
         assert len(config["evaluators"]) == 1
 
     def test_missing_dev_file(self, sample_config, tmp_path):
-        """Test error handling for missing development config file"""
+        """Test error handling for missing development config file."""
         base, _, tmp_path = sample_config
         base_path = tmp_path / "base.yaml"
         dev_path = tmp_path / "missing.yaml"
@@ -145,7 +146,7 @@ class TestLoadConfig:
 class TestFromYaml:
     """Tests for from_yaml class method"""
     def test_basic_creation(self, sample_config, tmp_path):
-        """Test creation of Experiment object from YAML"""
+        """Test creation of Experiment object from YAML."""
         base, _, tmp_path = sample_config
         base_path = tmp_path / "base.yaml"
         base_path.write_text(yaml.dump(base))
@@ -156,7 +157,7 @@ class TestFromYaml:
         assert len(experiment.evaluators) == 1
 
     def test_connection_expansion(self, sample_config, tmp_path):
-        """Test connection expansion from connection references"""
+        """Test connection expansion from connection references."""
         base, dev, tmp_path = sample_config
         base_path = tmp_path / "base.yaml"
         dev_path = tmp_path / "dev.yaml"
@@ -168,7 +169,7 @@ class TestFromYaml:
         assert {c.name for c in experiment.connections} == {"conn1", "conn2"}
 
     def test_missing_connection(self, tmp_path):
-        """Test error handling for missing connection reference"""
+        """Test error handling for missing connection reference."""
         config = {
             "name": "test",
             "flow": "flow",
@@ -185,10 +186,10 @@ class TestFromYaml:
 
 
 class TestResolveVariables:
-    """Tests for resolve_variables method"""
+    """Tests for resolve_variables method."""
 
     def test_env_var_resolution(self, monkeypatch):
-        """Test resolution of environment variables"""
+        """Test resolution of environment variables."""
         monkeypatch.setenv("API_KEY", "resolved_key")
         experiment = Experiment(
             name="test",
@@ -214,7 +215,7 @@ class TestResolveVariables:
         assert experiment.resolved_env_vars["TEST_VAR"] == "resolved_value"
 
     def test_missing_env_var(self, sample_connection):
-        """Test error handling for missing environment variable"""
+        """Test error handling for missing environment variable."""
         experiment = Experiment(
             name="test",
             flow="flow",
@@ -229,7 +230,7 @@ class TestResolveVariables:
 
 
 class TestAccessorMethods:
-    """Tests for get_evaluator and get_dataset methods"""
+    """Tests for get_evaluator and get_dataset methods."""
 
     def test_get_evaluator(self):
         """Test get_evaluator method"""
@@ -255,7 +256,7 @@ class TestAccessorMethods:
         assert experiment.get_evaluator("missing") is None
 
     def test_get_dataset(self):
-        """Test get_dataset method"""
+        """Test get_dataset method."""
         dataset = DatasetMapping(
             name="test_ds",
             source="source",
@@ -286,7 +287,7 @@ class TestAccessorMethods:
 
 # Edge Case Tests
 def test_empty_experiment():
-    """Test creation of an empty experiment"""
+    """Test creation of an empty experiment."""
     experiment = Experiment(
         name="empty",
         flow="",
@@ -301,7 +302,7 @@ def test_empty_experiment():
 
 
 def test_multiple_env_vars():
-    """Test resolution of multiple environment variables"""
+    """Test resolution of multiple environment variables."""
     experiment = Experiment(
         name="test",
         flow="flow",

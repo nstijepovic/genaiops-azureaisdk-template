@@ -1,10 +1,11 @@
+""" Test cases for the DatasetMapping class. """
 import pytest
 
 from llmops.experiment import DatasetMapping  # Replace with actual import path
 
 
 def test_minimal_initialization():
-    """Test creation with only required fields"""
+    """Test creation with only required fields."""
     mapping = DatasetMapping(
         name="test_dataset",
         source="azure_blob"
@@ -17,7 +18,7 @@ def test_minimal_initialization():
 
 
 def test_full_initialization():
-    """Test creation with all possible parameters"""
+    """Test creation with all possible parameters."""
     mapping = DatasetMapping(
         name="production_data",
         source="azureml://bucket/path",
@@ -32,7 +33,7 @@ def test_full_initialization():
 
 
 def test_optional_defaults():
-    """Test default values for optional parameters"""
+    """Test default values for optional parameters."""
     mapping = DatasetMapping(
         name="default_test",
         source="default_source"
@@ -49,7 +50,7 @@ def test_optional_defaults():
     "A very long description with special characters: !@#$%^&*()"
 ])
 def test_description_variations(description):
-    """Test different description scenarios"""
+    """Test different description scenarios."""
     mapping = DatasetMapping(
         name="desc_test",
         source="desc_source",
@@ -60,7 +61,7 @@ def test_description_variations(description):
 
 
 def test_empty_mappings():
-    """Test empty mappings initialization"""
+    """Test empty mappings initialization."""
     mapping = DatasetMapping(
         name="empty_map",
         source="empty_source",
@@ -72,7 +73,7 @@ def test_empty_mappings():
 
 
 def test_equality_check():
-    """Test instance equality based on field values"""
+    """Test instance equality based on field values."""
     mapping1 = DatasetMapping(
         name="eq_test",
         source="eq_source",

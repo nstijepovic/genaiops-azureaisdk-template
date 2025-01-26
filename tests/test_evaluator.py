@@ -1,3 +1,4 @@
+"""Tests for the Evaluator class."""
 import pytest
 from copy import deepcopy
 
@@ -6,7 +7,7 @@ from llmops.experiment import Evaluator, Connection
 
 @pytest.fixture
 def sample_connection():
-    """Fixture providing a Connection with placeholder values"""
+    """Fixture providing a Connection with placeholder values."""
     return Connection(
         name="${CONN_NAME}",
         connection_type="${CONN_TYPE}",
@@ -25,7 +26,7 @@ def connections_map(sample_connection):
 
 
 def test_resolve_variables_resolves_connections_and_env(monkeypatch, sample_connection):
-    """Test resolution of both connection and environment variables"""
+    """Test resolution of both connection and environment variables."""
     # Setup environment variables
     monkeypatch.setenv("CONN_NAME", "resolved_conn")
     monkeypatch.setenv("CONN_TYPE", "azure")
@@ -56,7 +57,7 @@ def test_resolve_variables_resolves_connections_and_env(monkeypatch, sample_conn
 
 
 def test_resolve_variables_handles_multiple_env_vars(monkeypatch):
-    """Test environment variable resolution with multiple entries"""
+    """Test environment variable resolution with multiple entries."""
     monkeypatch.setenv("VAR1", "val1")
     monkeypatch.setenv("VAR2", "val2")
 
@@ -83,7 +84,7 @@ def test_resolve_variables_handles_multiple_env_vars(monkeypatch):
 
 
 def test_resolve_variables_raises_on_missing_env_var():
-    """Test error handling for missing environment variables"""
+    """Test error handling for missing environment variables."""
     evaluator = Evaluator(
         name="test",
         flow="flow",
@@ -98,7 +99,7 @@ def test_resolve_variables_raises_on_missing_env_var():
 
 
 def test_from_dict_expands_connections(connections_map):
-    """Test connection expansion from connection references"""
+    """Test connection expansion from connection references."""
     data = {
         "name": "test_eval",
         "flow": "test_flow",
@@ -116,7 +117,7 @@ def test_from_dict_expands_connections(connections_map):
 
 
 def test_from_dict_raises_missing_connection(connections_map):
-    """Test error handling for missing connections in map"""
+    """Test error handling for missing connections in map."""
     data = {
         "name": "test_eval",
         "flow": "test_flow",
@@ -131,7 +132,7 @@ def test_from_dict_raises_missing_connection(connections_map):
 
 
 def test_from_dict_creates_datasets():
-    """Test proper dataset object creation"""
+    """Test proper dataset object creation."""
     data = {
         "name": "test",
         "flow": "flow",
@@ -159,7 +160,7 @@ def test_from_dict_creates_datasets():
 
 
 def test_resolve_variables_overwrites_env_vars(monkeypatch):
-    """Test that later env_vars entries overwrite earlier ones"""
+    """Test that later env_vars entries overwrite earlier ones."""
     monkeypatch.setenv("VAR", "new_value")
 
     evaluator = Evaluator(
@@ -179,7 +180,7 @@ def test_resolve_variables_overwrites_env_vars(monkeypatch):
 
 
 def test_non_string_env_vars_are_preserved():
-    """Test handling of non-string environment values"""
+    """Test handling of non-string environment values."""
     evaluator = Evaluator(
         name="test",
         flow="flow",
