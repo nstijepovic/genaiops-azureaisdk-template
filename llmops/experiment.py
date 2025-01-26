@@ -23,7 +23,7 @@ class DatasetMapping:
 @dataclass
 class Connection:
     """Connection configuration for external services."""
-    
+
     name: str
     connection_type: str
     api_base: str
@@ -306,7 +306,7 @@ def load_experiment(
     base_path: Optional[str] = None,
     env: Optional[str] = None
 ) -> Experiment:
-    """Load an experiment configuration from a YAML file."""    
+    """Load an experiment configuration from a YAML file."""
     safe_base_path = base_path or ""
     experiment_file_name = filename or "experiment.yaml"
 

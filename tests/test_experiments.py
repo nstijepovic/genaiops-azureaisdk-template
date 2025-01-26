@@ -145,6 +145,7 @@ class TestLoadConfig:
 
 class TestFromYaml:
     """Tests for from_yaml class method."""
+    
     def test_basic_creation(self, sample_config, tmp_path):
         """Test creation of Experiment object from YAML."""
         base, _, tmp_path = sample_config

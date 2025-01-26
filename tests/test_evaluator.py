@@ -21,7 +21,7 @@ def sample_connection():
 
 @pytest.fixture
 def connections_map(sample_connection):
-    """Fixture providing a connections map"""
+    """Fixture providing a connections map."""
     return {"valid_conn": sample_connection}
 
 

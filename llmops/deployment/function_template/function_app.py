@@ -1,3 +1,4 @@
+"""Entry point for the function app."""
 import azure.functions as func
 
 # Import blueprints
