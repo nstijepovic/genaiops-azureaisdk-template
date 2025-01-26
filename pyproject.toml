@@ -19,5 +19,5 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["llmops", "tests", "math_coding", "math_coding_async"]
+packages = ["llmops", "tests", "math_coding"]
 include-package-data = true
