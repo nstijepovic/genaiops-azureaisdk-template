@@ -144,7 +144,7 @@ class TestLoadConfig:
 
 
 class TestFromYaml:
-    """Tests for from_yaml class method"""
+    """Tests for from_yaml class method."""
     def test_basic_creation(self, sample_config, tmp_path):
         """Test creation of Experiment object from YAML."""
         base, _, tmp_path = sample_config
@@ -233,7 +233,7 @@ class TestAccessorMethods:
     """Tests for get_evaluator and get_dataset methods."""
 
     def test_get_evaluator(self):
-        """Test get_evaluator method"""
+        """Test get_evaluator method."""
         evaluator = Evaluator(
             name="test_eval",
             flow="eval_flow",

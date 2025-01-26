@@ -1,11 +1,11 @@
-""" Tests for Connection class in experiment.py """
+"""Tests for Connection class in experiment.py."""
 import pytest
 from llmops.experiment import Connection
 
 
 # Tests for resolve_variables method
 def test_resolve_variables_replaces_single_placeholder():
-    """ Test resolution of a single placeholder."""
+    """Test resolution of a single placeholder."""
     conn = Connection(
         name="${NAME}",
         connection_type="type",
@@ -21,7 +21,7 @@ def test_resolve_variables_replaces_single_placeholder():
 
 
 def test_resolve_variables_replaces_multiple_placeholders():
-    """ Test resolution of multiple placeholders."""
+    """Test resolution of multiple placeholders."""
     conn = Connection(
         name="${NAME}",
         connection_type="${TYPE}",
@@ -51,7 +51,7 @@ def test_resolve_variables_replaces_multiple_placeholders():
 
 
 def test_resolve_variables_raises_error_on_missing_env_var():
-    """ Test error handling for missing environment variable."""
+    """Test error handling for missing environment variable."""
     conn = Connection(
         name="test",
         connection_type="type",
@@ -67,7 +67,7 @@ def test_resolve_variables_raises_error_on_missing_env_var():
 
 
 def test_resolve_variables_ignores_non_placeholder_strings():
-    """ Test that non-placeholder strings are not modified."""
+    """Test that non-placeholder strings are not modified."""
     original_api_base = "no_placeholder_here"
     conn = Connection(
         name="test",
@@ -92,7 +92,7 @@ def test_resolve_variables_ignores_non_placeholder_strings():
     ("deployment_name", "DEPLOYMENT"),
 ])
 def test_resolve_variables_all_fields(field, var_name):
-    """ Test resolution of all fields """
+    """Test resolution of all fields."""
     initial_data = {
         "name": "test",
         "connection_type": "type",
@@ -111,7 +111,7 @@ def test_resolve_variables_all_fields(field, var_name):
 
 # Tests for from_dict classmethod
 def test_from_dict_creates_instance_correctly():
-    """ Test that Connection instance is created correctly from dict."""
+    """Test that Connection instance is created correctly from dict."""
     data = {
         "name": "test_conn",
         "connection_type": "azure",
@@ -132,7 +132,7 @@ def test_from_dict_creates_instance_correctly():
 
 
 def test_from_dict_missing_key_raises_keyerror():
-    """ Test error handling for missing key in input dict."""
+    """Test error handling for missing key in input dict."""
     incomplete_data = {
         "name": "test",
         "connection_type": "type",

@@ -15,7 +15,7 @@ def mock_experiment():
 
 @pytest.fixture
 def mock_files():
-    """Fixture providing a dictionary of mock file contents"""
+    """Fixture providing a dictionary of mock file contents."""
     return {
         "base.yaml": "name: base_config",
         "base.dev.yaml": "name: dev_config",
@@ -72,7 +72,7 @@ def test_nonexistent_base_file():
 
 
 def test_invalid_filename():
-    """Test validation of filename format"""
+    """Test validation of filename format."""
     with pytest.raises(ValueError) as excinfo:
         # Test with filename that has no extension
         load_experiment(filename="invalid_file")

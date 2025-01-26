@@ -43,9 +43,7 @@ def prepare_and_execute(
     env_name: Optional[str] = None,
     report_dir: Optional[str] = None,
 ):
-    """
-    Prepare and execute the evaluations for the given experiment.
-    """
+    """Prepare and execute the evaluations for the given experiment."""
     load_dotenv(override=True)
     logger.debug("Environment variables loaded")
 

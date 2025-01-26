@@ -1,4 +1,4 @@
-""" Test cases for the DatasetMapping class. """
+"""Test cases for the DatasetMapping class."""
 import pytest
 
 from llmops.experiment import DatasetMapping  # Replace with actual import path
