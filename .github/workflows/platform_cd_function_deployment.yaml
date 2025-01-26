@@ -228,7 +228,7 @@ jobs:
           sleep 30  # Give it time to fully stop
           az functionapp start --name $APP_NAME --resource-group $RESOURCE_GROUP
 
-          sleep 10
+          sleep 60  # Give it time to fully start
 
           echo "Successfully restarted Function App settings"
 

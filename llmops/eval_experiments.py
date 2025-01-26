@@ -152,7 +152,7 @@ def prepare_and_execute(
                             )
                         for ds in evaluator.datasets:
                             logger.info("Processing dataset: %s", ds.source)
-                            
+
                             timestamp = datetime.datetime.now().strftime(
                                 "%Y%m%d_%H%M%S"
                                 )

@@ -8,7 +8,6 @@ from azure.ai.projects import AIProjectClient
 from azure.monitor.opentelemetry import configure_azure_monitor
 
 
-
 # Blueprint creation
 bp = func.Blueprint()
 
@@ -20,7 +19,7 @@ def initialize_once():
     global _IS_INITIALIZED
     if not _IS_INITIALIZED:
         logging.info("Running startup initialization...")
-        
+
         _IS_INITIALIZED = True
 
 
@@ -61,7 +60,7 @@ def process_math(req: func.HttpRequest) -> func.HttpResponse:
         # 1. Request handling
         enable_telemetry()
         question = req.params.get('question')
-        
+
         # 2. Input validation
         if not question:
             return func.HttpResponse(

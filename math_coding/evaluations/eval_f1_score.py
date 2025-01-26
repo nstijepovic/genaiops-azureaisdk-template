@@ -22,12 +22,12 @@ def eval_run_eval(
     """
     Evaluate the model using the given data and column mapping.
     """
-    
+
     project = AIProjectClient.from_connection_string(
         conn_str=f"{os.environ['CONNECTION_STRING']}",
         credential=DefaultAzureCredential()
     )
-    
+
     f1score = F1ScoreEvaluator()
     result = evaluate(
         data=data_path,

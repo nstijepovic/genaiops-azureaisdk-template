@@ -1,4 +1,4 @@
-"""Online Evaluation script for math_coding."""    
+"""Online Evaluation script for math_coding."""
 import os
 import argparse
 import yaml
@@ -82,7 +82,7 @@ def prepare_and_execute(
     if not application_insights_connection_string:
         print("no application insight configured")
 
-    # Connect to your Application Insights resource 
+    # Connect to your Application Insights resource
     app_insights_config = ApplicationInsightsConfiguration(
         resource_id=APPLICATION_INSIGHTS_RESOURCE_ID,
         query=KUSTO_QUERY,
