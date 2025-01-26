@@ -60,7 +60,7 @@ jobs:
       - name: Execute Unit Tests
         shell: bash
         run: |
-          pytest ${{ inputs.use_case_base_path }}/tests --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+          pytest ./tests/ --junitxml=junit/test-results.xml --cov=. --cov-report=xml
   
       - name: Publish Unit Test Results
         uses: actions/upload-artifact@v3
