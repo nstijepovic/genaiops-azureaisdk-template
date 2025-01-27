@@ -234,7 +234,7 @@ evaluators:
          response: "${target.response}"    # Actual output
 ```
 
-### experiment.<env>.yaml
+### Environment specific experiment.yaml
 Environment-specific configuration files (e.g., experiment.dev.yaml) and it can override settings in experiment.yaml.
 
 
