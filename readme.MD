@@ -25,6 +25,7 @@ The GenAIOps accelerator is designed to streamline the development, evaluation, 
 ## 2. Repository Structure
 The repository has the following structure:
 
+```
 genaiops-azureaisdk-template/
 ├── .github/ # Contains github actions and workflows
 ├── docs/ # Contains documentation and guides
@@ -35,10 +36,11 @@ genaiops-azureaisdk-template/
 ├── .gitignore # Contains files and folders to ignore
 ├── .env.sample # Sample environment variables file
 ├── README.md # Main documentation file
-
+```
 
 The repository has the following structure for each use case:
 
+```
 use_case_name/
 ├── data/ # Contains datasets for evaluation
 ├── flows/ # Contains flow definitions for experiments
@@ -47,7 +49,7 @@ use_case_name/
 ├── deployment/ # Contains deployment scripts and configurations
 ├── experiment.yaml # Main configuration file for the experiment
 ├── experiment.<env>.yaml # Environment-specific configuration files
-
+```
 
 ---
 
