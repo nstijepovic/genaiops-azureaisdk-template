@@ -18,7 +18,7 @@ This documentation provides a step-by-step guide to setting up, running, and man
 ---
 
 ## 1. Introduction
-The GenAIOps accelerator is designed to streamline the development, evaluation, and deployment of generative AI experiments using Azure AI Foundry. It supports multiple use cases, each with a predefined folder structure and configuration files. The accelerator allows you to run experiments locally and executionon GitHub using GitHub Actions.
+The GenAIOps accelerator is designed to streamline the *development, evaluation - both offline and online, and deployment* of generative AI experiments using Azure AI Foundry. It supports multiple use cases, each with a predefined folder structure and configuration files. The accelerator allows you to run experiments locally and executionon GitHub using GitHub Actions.
 
 ---
 
