@@ -165,43 +165,77 @@ git push origin main
  - Only triggers if changes affect math_coding/**, .github/**, or llmops/**.
 
 ## 6. Configuration Files
-experiment.yaml
-This file contains the main configuration for the experiment. Example:
+### experiment.yaml
+This file contains the main configuration for the experiment. 
+
+Example:
 
 ```yaml
+# Name of the experiment. Must match use case folder name
 name: math_coding
+
+# Description of what the experiment does
 description: "This is a math coding experiment"
+
+# Path to the flow definition file. Must match the folder structure
 flow: flows/math_code_generation
+
+# Function to be called when flow starts. Must math the flow definition
 entry_point: pure_python_flow:get_math_response
+
+# List of available connection configurations. Uses Environment Variables for secrets
+# These secrets are defined in .env file and github secrets
+# These connections are referred in experiments and evaluations
+onnections:
+  - name: aoai
+    connection_type: AzureOpenAIConnection
+    api_base: https://demoopenaiexamples.openai.azure.com/
+    api_version: 2023-07-01-preview
+    api_key: ${AOAI_API_KEY}
+    api_type: azure
+    deployment_name: ${GPT4O_DEPLOYMENT_NAME}
+  - name: gpt4o
+    connection_type: AzureOpenAIConnection
+    api_base: https://demoopenaiexamples.openai.azure.com/
+    api_version: 2023-07-01-preview
+    api_key: ${GPT4O_API_KEY}
+    api_type: azure
+    deployment_name: ${GPT4O_DEPLOYMENT_NAME}
+
+# List of connection configurations to use
 connections_ref:
-  - aoai
-  - gpt4o
+ - aoai
+ - gpt4o
+
+# Environment variables needed for the experiment
 env_vars:
-  - env_var1: "value1"
-  - env_var2: ${GPT4O_API_KEY}
-  - PROMPTY_FILE: another_template.prompty
+ - env_var1: "value1"  # Static value
+ - env_var2: ${GPT4O_API_KEY}  # Value from environment variable
+ - PROMPTY_FILE: another_template.prompty  # Template file path
+
+# Evaluation configuration
 evaluators:
-- name: eval_f1_score
-  flow: evaluations
-  entry_point: pure_python_flow:get_math_response
-  connections_ref:
-    - aoai1
-    - gpt4o1
-  env_vars:
-    - env_var3: "value1"
-    - env_var4: ${GPT4O_API_KEY}
-    - ENABLE_TELEMETRY: True
-  datasets:
-    - name: math_coding_test
-      source: data/math_data.jsonl
-      description: "This dataset is for evaluating flows."
-      mappings:
-        ground_truth: "${data.answer}"
-        response: "${target.response}"
+ - name: eval_f1_score  # Name of evaluator
+   flow: evaluations    # Path to evaluation flow
+   entry_point: pure_python_flow:get_math_response  # Evaluation function
+   connections_ref:     # Connections for evaluation
+     - aoai
+     - gpt4o
+   env_vars:           # Environment variables for evaluation
+     - env_var3: "value1"
+     - env_var4: ${GPT4O_API_KEY}
+     - ENABLE_TELEMETRY: True
+   datasets:           # Test datasets configuration
+     - name: math_coding_test
+       source: data/math_data.jsonl  # Path to test data
+       description: "This dataset is for evaluating flows."
+       mappings:      # How to map data fields
+         ground_truth: "${data.answer}"    # Expected output
+         response: "${target.response}"    # Actual output
 ```
 
-experiment.<env>.yaml
-Environment-specific configuration files (e.g., experiment.dev.yaml) can override settings in experiment.yaml.
+### experiment.<env>.yaml
+Environment-specific configuration files (e.g., experiment.dev.yaml) and it can override settings in experiment.yaml.
 
 
 ## 7. Environment Variables
