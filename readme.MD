@@ -249,4 +249,4 @@ AOAI_API_KEY=your_aoai_key_here
 ## 8. Best Practices
 Secrets Management: Always store sensitive information in GitHub Secrets or .env files.
 Environment Isolation: Use separate environments (e.g., dev, test, prod) for different stages of development.
-Version Control: Regularly commit and push changes to GitHub to ensure code is backed up and workflows are triggered.
+Version Control: Regularly commit and push changes to GitHub to ensure code is backed up and workflows are triggered.# genaiops-azureaisdk-template
