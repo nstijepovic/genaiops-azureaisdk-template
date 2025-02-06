@@ -94,7 +94,7 @@ def prepare_and_execute(
             if os.path.isfile(os.path.join(evaluator_path, eval_filename)):
                 logger.info("Found evaluation file: %s", eval_filename)
                 module_name = evaluator.name.lstrip().rstrip()
-                flow_components = evaluator_path.split('/')
+                flow_components = evaluator_path.split(os.sep)
                 flow_formatted = '.'.join(flow_components)
                 module_path = (
                     f'{flow_formatted}.'
