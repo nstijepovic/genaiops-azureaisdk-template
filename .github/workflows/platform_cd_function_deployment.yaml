@@ -27,7 +27,7 @@ on:
 
 jobs:
   flow-deployment:
-    name: prompt flow deployment job
+    name: AI SDK deployment job
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.env_name }}

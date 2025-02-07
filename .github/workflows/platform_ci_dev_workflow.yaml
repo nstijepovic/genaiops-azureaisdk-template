@@ -27,7 +27,7 @@ on:
         default: "math_coding"
 jobs:
   flow-experiment-and_evaluation:
-    name: prompt flow experiment and evaluation job
+    name: AI SDK experiment and evaluation job
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.env_name }}
@@ -101,7 +101,6 @@ jobs:
       # Execute a RUN for each unique variant combination (keeping default variant id for other nodes)
       # Loads appropriate experiment data from Azure ML data asset
       # Reads appropriate field values from experiment.yaml or experiment.<env>.yaml
-      # Prompt Flow connections should pre-exist 
       # used automatic (serverless) runtime by default
       # writes the RUN ID in run_id.txt file. Used in next step
       #=====================================

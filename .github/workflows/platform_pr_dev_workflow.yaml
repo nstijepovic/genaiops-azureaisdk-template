@@ -108,10 +108,10 @@ jobs:
           export subscriptionId=$(az account show --query id -o tsv)
           echo "SUBSCRIPTION_ID=$subscriptionId" >> $GITHUB_OUTPUT
 
-      - name: Execute prompt flow bulk run
+      - name: Execute AI SDK bulk run
         uses: ./.github/actions/execute_script
         with:
-          step_name: "Execute prompt flow bulk run"
+          step_name: "Execute AI SDK bulk run"
           script_parameter: |
             python -m llmops.eval_experiments \
             --environment_name ${{ inputs.env_name }} \
