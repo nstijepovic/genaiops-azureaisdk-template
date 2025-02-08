@@ -7,34 +7,34 @@ GenAIOps with AI Foundry is a template project that helps you implement and mana
 ## Documentation Sections
 
 ### 1. Getting Started Guide
-- [Getting Started Guide](docs/getting-started.md)
+- [Getting Started Guide](guides/getting-started.md)
   - Initial repository setup
   - Basic configuration
   - Fork and clone instructions
   - GitHub actions setup
 
 ### 2. Infrastructure Setup
-- [Cloud Infrastructure Setup](docs/setup-cloud-infra.md)
+- [Cloud Infrastructure Setup](guides/setup-cloud-infra.md)
   - Azure resource provisioning
   - Terraform configuration
   - Infrastructure deployment steps
   - Environment verification
 
 ### 3. Local Development Environment
-- [Local Setup with Conda](docs/local-setup-conda.md)
+- [Local Setup with Conda](guides/local-setup-conda.md)
   - Conda environment configuration
   - Package installation
   - Environment variables setup
   - Local testing procedures
 
-- [Local Setup with UV](docs/local-setup-uv.md)
+- [Local Setup with UV](guides/local-setup-uv.md)
   - UV environment setup
   - Package management
   - Configuration steps
   - Testing procedures
 
 ### 4. Experimentation Guide
-- [Experimentation Configuration](docs/experimentation-guide.md)
+- [Experimentation Configuration](guides/experimentation-guide.md)
   - Experiment setup
   - Configuration files
   - Evaluator setup
@@ -42,7 +42,7 @@ GenAIOps with AI Foundry is a template project that helps you implement and mana
   - Results analysis
 
 ### 5. GitHub Integration
-- [GitHub Repository Setup](docs/setup-github-repo.md)
+- [GitHub Repository Setup](guides/setup-github-repo.md)
   - Service principal creation
   - Environment configuration
   - Workflow setup
@@ -52,16 +52,16 @@ GenAIOps with AI Foundry is a template project that helps you implement and mana
 ## Quick Links
 
 ### Setup and Configuration
-- [Prerequisites](docs/getting-started.md#prerequisites)
-- [Environment Variables](docs/local-setup-conda.md#environment-variables-configuration)
-- [Infrastructure Overview](docs/setup-cloud-infra.md#infrastructure-overview)
-- [GitHub Workflows](docs/setup-github-repo.md#workflow-configurations)
+- [Prerequisites](guides/getting-started.md#prerequisites)
+- [Environment Variables](guides/local-setup-conda.md#environment-variables-configuration)
+- [Infrastructure Overview](guides/setup-cloud-infra.md#infrastructure-overview)
+- [GitHub Workflows](guides/setup-github-repo.md#workflow-configurations)
 
 ### Development and Testing
-- [Local Development](docs/local-setup-conda.md#verification)
-- [Experiment Configuration](docs/experimentation-guide.md#configuration-files)
-- [Deployment Steps](docs/setup-cloud-infra.md#deployment-steps)
-- [Best Practices](docs/setup-github-repo.md#best-practices)
+- [Local Development](guides/local-setup-conda.md#verification)
+- [Experiment Configuration](guides/experimentation-guide.md#configuration-files)
+- [Deployment Steps](guides/setup-cloud-infra.md#deployment-steps)
+- [Best Practices](guides/setup-github-repo.md#best-practices)
 
 ## Repo Structure
 
@@ -95,7 +95,7 @@ use_case_name/
 
 ## Getting Help
 
-- Check the [Troubleshooting](docs/setup-github-repo.md#troubleshooting) section for common issues
+- Check the [Troubleshooting](guides/setup-github-repo.md#troubleshooting) section for common issues
 - Review workflow logs for debugging information
 - Ensure all environment variables are properly configured
 - Verify Azure and GitHub permissions
@@ -129,7 +129,7 @@ use_case_name/
 
 ## Next Steps
 
-1. Start with the [Getting Started Guide](docs/getting-started.md)
-2. Set up your [Development Environment](docs/local-setup-conda.md)
-3. Configure [Azure Infrastructure](docs/setup-cloud-infra.md)
-4. Begin [Experimentation](docs/experimentation-guide.md)
+1. Start with the [Getting Started Guide](guides/getting-started.md)
+2. Set up your [Development Environment](guides/local-setup-conda.md)
+3. Configure [Azure Infrastructure](guides/setup-cloud-infra.md)
+4. Begin [Experimentation](guides/experimentation-guide.md)
