@@ -19,8 +19,8 @@ az ad sp create-for-rbac --name "your-sp-name" --role contributor \
     --scopes /subscriptions/your-subscription-id \
     --sdk-auth
 
-# These credentials are used as Github environment secrets to access 
-# Azure resources and services from Github workflows
+# These credentials are used as Github environment secrets to access Azure resources and services from Github workflows.
+# **DO NOT** store or save them anywhere locally or in the repository
 ```
 
 The output should look like:
