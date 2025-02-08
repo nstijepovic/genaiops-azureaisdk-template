@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started - Template Documentation</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+</head>
+<body>
+    <header>
+        <div class="project-name">GenAIOps with AI Foundry</div>
+    </header>
+
+    <div class="sidebar">
+        <nav>
+            <ul class="nav-list">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="setup-cloud-infra.html">Cloud Infrastructure Setup</a></li>
+                <li><a href="local-setup-conda.html">Local Setup</a></li>
+                <li><a href="local-setup-uv.html">Local Setup</a></li>
+                <li><a href="setup-github-repo.html">GitHub Setup</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <h1>Getting Started</h1>
+        
+        <h2>Prerequisites</h2>
+        <ul>
+            <li>A GitHub account</li>
+            <li>Git installed on your local machine</li>
+            <li>Visual Studio Code or similar development IDE</li>
+        </ul>
+
+        <h2>1. Fork the Repository</h2>
+        <p>First, you'll need to fork the repository to your organization:</p>
+        <ol>
+            <li>Navigate to the original repository at <code>https://github.com/microsoft/genaiops-azureaisdk-template/</code></li>
+            <li>Click the "Fork" button in the top-right corner</li>
+            <li>Select your organization from the dropdown menu</li>
+            <li>Wait for the forking process to complete</li>
+        </ol>
+
+        <h2>2. Enable GitHub Actions</h2>
+        <p>To enable GitHub Actions in your forked repository:</p>
+        <ol>
+            <li>Go to your forked repository's settings</li>
+            <li>Click on "Actions" in the left sidebar</li>
+            <li>Under "Actions permissions", select "Allow all actions and reusable workflows"</li>
+            <li>Click "Save"</li>
+        </ol>
+
+        <h2>3. Clone the Repository Locally</h2>
+        <p>Clone your forked repository to your local machine:</p>
+        <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/your-org/genaiops-azureaisdk-template.git
+
+# Navigate into the project directory
+cd genaiops-azureaisdk-template
+
+        <pre><code class="language-bash"># View your remote repositories
+git remote -v
+
+# Should show:
+# origin    https://github.com/your-org/genaiops-azureaisdk-template.git (fetch)
+# origin    https://github.com/your-org/genaiops-azureaisdk-template.git (push)
+# upstream  https://github.com/original-org/genaiops-azureaisdk-template.git (fetch)
+# upstream  https://github.com/original-org/genaiops-azureaisdk-template.git (push)</code></pre>
+
+        <h2>4. Create a Feature Branch</h2>
+        <p>Before making changes, create a new feature branch:</p>
+        <pre><code class="language-bash"># Ensure you're on the main branch and up-to-date
+git checkout main
+
+# Create and switch to a new feature branch
+git checkout -b feature/your-feature-name
+
+# Example:
+git checkout -b feature/add-prompty-file</code></pre>
+
+        <h2>Best Practices for Branch Names</h2>
+        <p>When naming your feature branches, follow these conventions:</p>
+        <ul>
+            <li>Use the prefix <code>feature/</code> for new features</li>
+            <li>Use the prefix <code>bugfix/</code> for bug fixes</li>
+            <li>Use the prefix <code>hotfix/</code> for urgent fixes</li>
+            <li>Use hyphens to separate words</li>
+            <li>Keep names short but descriptive</li>
+        </ul>
+        <p>Examples:</p>
+        <ul>
+            <li><code>feature/user-authentication</code></li>
+            <li><code>bugfix/login-validation</code></li>
+            <li><code>hotfix/security-patch</code></li>
+        </ul>
+
+        <h2>Next Steps</h2>
+        <p>Now that you have your development environment has code set up, you can:</p>
+        <ul>
+            <li>Setup Azure Infastructure to experince the template</li>
+            <li>Setup Local environment for experimentation </li>
+            <li>Perform local Experimentation</li>
+            <li>Setup Github Secrets</li>
+        </ul>
+    </main>
+</body>
+</html>

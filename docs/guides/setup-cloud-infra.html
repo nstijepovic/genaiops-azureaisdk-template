@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Infrastructure Setup - Template Documentation</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+</head>
+<body>
+    <header>
+        <div class="project-name">GenAIOps with AI Foundry</div>
+    </header>
+
+    <div class="sidebar">
+        <nav>
+            <ul class="nav-list">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="setup-cloud-infra.html">Cloud Infrastructure Setup</a></li>
+                <li><a href="local-setup-conda.html">Local Setup</a></li>
+                <li><a href="local-setup-uv.html">Local Setup</a></li>
+                <li><a href="setup-github-repo.html">GitHub Setup</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <h1>Azure Infrastructure Setup</h1>
+        
+        <h2>Prerequisites</h2>
+        <ul>
+            <li>Access to Azure Subscription with Contribution rights</li>
+            <li>Azure CLI installed and configured</li>
+            <li>Terraform installed (version 1.0 or later)</li>
+            <li>Appropriate Azure permissions to create resources</li>
+        </ul>
+
+        <h2>Infrastructure Overview</h2>
+        <p>The infrastructure setup creates a public environment in Azure with the following components:</p>
+        <ul>
+            <li>Azure AI Foundry Hub Project</li>
+            <li>Azure Container Registry</li>
+            <li>Application Insights</li>
+            <li>Storage Account</li>
+            <li>Key Vault</li>
+            <li>Function App with associated resources</li>
+        </ul>
+
+        <h2>Terraform Files Structure</h2>
+        <p>The infrastructure code is organized into several Terraform files, each with a specific purpose:</p>
+
+        <h3>variables.tf</h3>
+        <p>Defines all input variables used across the Terraform configuration:</p>
+        <p>Add more variables to make the infra configuration more flexible:</p>
+        <ul>
+            <li>Resource naming </li>
+            <li>Resource azure region</li>
+            <li>Service tiers and SKUs</li>
+        </ul>
+
+        <h3>terraform.tf</h3>
+        <p>Contains the Terraform configuration and provider settings:</p>
+        <ul>
+            <li>Required provider versions</li>
+            <li>Backend configuration for state storage</li>
+            <li>Provider-specific settings</li>
+        </ul>
+
+        <h3>ai_foundry.tf</h3>
+        <p>Manages Azure AI Foundry Hub resources:</p>
+        <ul>
+            <li>AI Foundry Hub and Project creation</li>
+            <li>Associated Resources</li>
+            <li>Associated permissions and roles</li>
+        </ul>
+
+        <h3>function_app.tf</h3>
+        <p>Defines the Function App and its dependencies:</p>
+        <ul>
+            <li>App Service Plan</li>
+            <li>Function App settings</li>
+            <li>Associated storage account</li>
+            <li>Application Insights integration</li>
+        </ul>
+
+        <h3>locals.tf</h3>
+        <p>Contains local variables used for:</p>
+        <ul>
+            <li>It is empty and provided for modifying variables before usage</li>
+        </ul>
+
+        <h3>outputs.tf</h3>
+        <p>Defines the outputs exposed after infrastructure deployment:</p>
+        <ul>
+            <li>Resource IDs</li>
+        </ul>
+
+        <h3>dev.tfvars</h3>
+        <p>Environment-specific variable values for development environment:</p>
+        <ul>
+            <li>It is empty and provided for adding values for dev environment</li>
+            <li>Similar file for each environment should be created</li>
+        </ul>
+
+        <h2>Deployment Steps</h2>
+        <p>Follow these steps to deploy the infrastructure:</p>
+
+        <h3>1. Authentication</h3>
+        <pre><code class="language-bash"># Login to Azure
+az login
+
+# Verify your subscription
+az account show</code></pre>
+
+        <h3>2. Initialize Terraform</h3>
+        <pre><code class="language-bash"># Navigate to the infrastructure directory
+cd infra
+
+# Initialize Terraform
+terraform init</code></pre>
+        <p>This step downloads required providers and initializes the backend.</p>
+
+        <h3>3. Plan the Deployment</h3>
+        <pre><code class="language-bash"># Create execution plan
+terraform plan </code></pre>
+        <p>Review the plan output carefully for:</p>
+        <ul>
+            <li>Resources to be created</li>
+            <li>Any changes to existing resources</li>
+            <li>Potential issues or warnings</li>
+        </ul>
+
+        <h3>4. Apply the Changes</h3>
+        <pre><code class="language-bash"># Apply the plan
+terraform apply </code></pre>
+
+        <h3>5. Verify Deployment</h3>
+        <p>After deployment completes:</p>
+        <ol>
+            <li>Check the Azure portal for the new resource group</li>
+            <li>Verify all resources are created successfully</li>
+            <li>Ensure there are no deployment errors in the activity log</li>
+            <li>Test resource connectivity and permissions</li>
+        </ol>
+
+        <h2>Customization</h2>
+        <p>To customize the infrastructure for your needs:</p>
+        <ul>
+            <li>Modify resource naming in <code>locals.tf</code></li>
+            <li>Adjust resource SKUs and tiers in <code>variables.tf</code></li>
+            <li>Add or modify resources in respective .tf files</li>
+            <li>Update environment-specific values in <code>dev.tfvars</code></li>
+        </ul>
+
+        <div class="note">
+            <h3>Note: Public Environment</h3>
+            <p>This setup creates a public environment. For private environment setup (including private endpoints and network isolation), additional configuration will be needed. Links to private environment setup documentation will be added in future updates.</p>
+        </div>
+
+        <h2>Next Steps</h2>
+        <ul>
+            <li>Setup Local environment for experimentation </li>
+            <li>Perform local Experimentation</li>
+            <li>Setup Github Secrets</li>
+        </ul>
+    </main>
+</body>
+</html>

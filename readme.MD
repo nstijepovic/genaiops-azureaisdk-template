@@ -2,6 +2,8 @@
 
 This documentation provides a step-by-step guide to setting up, running, and managing the GenAIOps accelerator using Azure AI Foundry. It supports multiple use cases, each with a predefined folder structure and configuration files. The guide is designed to help both beginners and experienced users get started with running experiments locally and on GitHub.
 
+** detailed documentation is available in the [docs](./docs/index.html) folder. ** 
+
 ---
 
 ## Table of Contents
