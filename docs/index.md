@@ -27,7 +27,7 @@ GenAIOps with AI Foundry is a template project that helps you implement and mana
   - Environment variables setup
   - Local testing procedures
 
-- [Local Setup with UV](guides/local-setup-uv.md)
+- [Local Setup with UV - coming soon]()
   - UV environment setup
   - Package management
   - Configuration steps
