@@ -11,6 +11,6 @@ mldesigner==0.1.0b4
 pandas==2.2.1
 python-dotenv>=0.10.3
 azure-ai-projects
-azure-ai-evaluation
+azure-ai-evaluation[remote]
 azure-monitor-opentelemetry
 azure-ai-inference
