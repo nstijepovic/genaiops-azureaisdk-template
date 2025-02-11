@@ -18,7 +18,7 @@ variable "prefix" {
 
 variable "sku" {
     type        = string
-    description = "The sku name of the AIServicesResource.
+    description = "The sku name of the AIServicesResource."
     default     = "S0"
 }
 
