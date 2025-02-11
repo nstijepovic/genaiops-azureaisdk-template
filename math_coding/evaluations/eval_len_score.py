@@ -6,6 +6,8 @@ from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
+from lib.answer_len.answer_length import AnswerLengthEvaluator
+
 from math_coding.flows.math_code_generation.pure_python_flow import (
     get_math_response
 )
@@ -28,20 +30,15 @@ def eval_run_eval(
         credential=DefaultAzureCredential()
     )
 
-    f1score = F1ScoreEvaluator()
+    answer_length_evaluator = AnswerLengthEvaluator()
     result = evaluate(
         data=data_path,
         target=get_math_response,
-        evaluation_name="evaluate_math_responses",
+        evaluation_name="evaluate_math_len",
         evaluators={
-            "f1_score": f1score,
-        },
-        evaluator_config={
-            "default": {
-                "column_mapping": dict(column_mapping)
-            }
+            "answer_length": answer_length_evaluator,
         },
         azure_ai_project=project.scope,
-        output_path=f"{output_path}/{name}_f1.json"
+        output_path=f"{output_path}/{name}_math_len.json"
     )
     return result

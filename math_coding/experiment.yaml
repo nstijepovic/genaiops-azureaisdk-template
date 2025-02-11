@@ -58,3 +58,20 @@ evaluators:
       mappings:
         ground_truth: "${data.answer}"
         response: "${target.response}"
+- name: eval_len_score
+  flow: evaluations
+  entry_point: pure_python_flow:get_math_response
+  connections_ref:
+    - aoai1
+    - gpt4o1
+  env_vars:
+    - env_var3: "value1"
+    - env_var4: ${GPT4O_API_KEY}
+    - ENABLE_TELEMETRY: True
+  datasets:
+    - name: math_coding_len_test
+      source: data/math_data_len.jsonl
+      description: "This dataset is for evaluating flows."
+      mappings:
+        ground_truth: "${data.answer}"
+        response: "${target.response}"

@@ -72,6 +72,7 @@ genaiops-azureaisdk-template/
 ├── .github/ # Contains github actions and workflows
 ├── docs/ # Contains documentation and guides
 ├── infra/ # Contains terraform code for building public infrastructure
+├── lib/ # Contains reusable code for like custom evaluators
 ├── llmops/ # Main scripts for running experiments
 ├── math_coding/ # sample use case folder
 ├── tests/ # Contains unit tests for llmops scripts

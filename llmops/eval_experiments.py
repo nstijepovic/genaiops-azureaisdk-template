@@ -8,7 +8,6 @@ import os
 import sys
 from typing import Optional
 import logging
-
 from dotenv import load_dotenv
 
 from llmops.experiment import load_experiment
@@ -183,14 +182,10 @@ def prepare_and_execute(
                                 "Evaluation completed successfully: %s", result
                             )
                             results.append(result)
-
-                return {
-                    'status': 'success',
-                    'results': results,
-                    'experiment_name': experiment.name
-                }
             else:
                 print(f"No evaluation flow found for {evaluator.name}")
+
+        return results
     except Exception as e:
         print(f"Evaluation failed: {str(e)}")
         raise
@@ -221,7 +216,6 @@ if __name__ == "__main__":
         type=str,
         help="experiment config file name",
     )
-
     args = parser.parse_args()
 
     prepare_and_execute(
