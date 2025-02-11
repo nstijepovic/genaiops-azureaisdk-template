@@ -33,6 +33,7 @@ on:
       - 'math_coding/**'
       - '.github/**'
       - 'llmops/**'
+      - 'lib/**'
 
 #=====================================
 # Execute platform_pr_dev_workflow workflow for experiment, evaluation and deployment of flows
