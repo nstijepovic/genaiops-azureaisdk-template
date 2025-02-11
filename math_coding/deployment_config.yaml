@@ -1,7 +1,7 @@
 name: math_coding
 description: "This is a math coding experiment"
 type: function_app
-resource_group: rg-mint-bonefish
+resource_group: rg-rich-mullet
 service_name: rg-rich-mullet
 app_name: rg-rich-mullet
 function_name: process_math
