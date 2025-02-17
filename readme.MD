@@ -4,7 +4,52 @@ This documentation provides a step-by-step guide to setting up, running, and man
 
 ** detailed documentation is available in the [docs](./docs/index.md) folder. ** 
 
----
+## Azure AI Foundry GenAIops Features
+
+### Inner Loop - Experimentation and Evaluation
+
+* **Local Development Environment Integration**
+   - Seamless integration with VS Code and development tools for local experimentation
+   - Support for rapid prototyping and testing of Use cases
+   - Built-in version control and experiment tracking capabilities
+
+* **Customizable Evaluation Framework**
+   - Comprehensive set of out-of-box evaluators for common metrics and benchmarks
+   - Ability to create and integrate custom evaluators for specific use cases (lib folder)
+   - Automated evaluation pipelines for consistent assessment
+
+* **AI Azure Agents Integration**
+   - Native support for Azure AI agents
+   - Automated agent deployment and testing capabilities
+   - Built-in monitoring and evaluation for agent behavior
+
+### Outer Loop - Deployment and Inference
+
+* **Streamlined Deployment Pipeline**
+   - Automated deployment processes for models and associated infrastructure
+   - Integration with Azure's robust security and compliance features
+
+* **Online Evaluation and Observability**
+   - Real-time monitoring of model performance and system health
+   - Comprehensive logging and tracing capabilities across the deployment stack
+
+## Platform Capabilities
+
+* **Unified Platform Experience**
+   - Single interface for managing multiple AI use cases and workflows
+   - Centralized dashboard for monitoring all aspects of AI operations
+   - Integrated tooling for collaboration and knowledge sharing
+   - Integrated Github Actions for CI/CD
+
+* **Flexible Execution Options**
+   - Support for both cloud and local execution environments
+   - Hybrid deployment options for optimized resource utilization
+   - Seamless scaling between development and production environments
+
+* **Advanced Monitoring and Analytics**
+   - Detailed metrics and KPIs for model performance tracking
+   - Built-in tools for A/B testing and model comparison
+   - Comprehensive audit trails for regulatory compliance and governance
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
