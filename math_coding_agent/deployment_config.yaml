@@ -1,10 +1,10 @@
-name: math_coding
-description: "This is a math coding experiment"
+name: math_coding_agent
+description: "This is a math coding agent experiment"
 type: function_app
 resource_group: rg-rich-mullet
 service_name: rg-rich-mullet
 app_name: rg-rich-mullet
-function_name: process_math
+function_name: process_math_agent
 runtime: python
 version: 3.11
 location: eastus

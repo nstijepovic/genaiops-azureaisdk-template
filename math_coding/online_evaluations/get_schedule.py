@@ -7,6 +7,7 @@ from azure.identity import DefaultAzureCredential
 
 from dotenv import load_dotenv
 
+
 def prepare_and_execute(
     base_path
 ):

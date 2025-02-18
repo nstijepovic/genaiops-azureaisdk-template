@@ -1,11 +1,12 @@
 """Online Evaluation script for math_coding."""
 import os
-import yaml
 import argparse
+import yaml
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 
 from dotenv import load_dotenv
+
 
 def prepare_and_execute(
     base_path

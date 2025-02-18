@@ -1,7 +1,7 @@
 """Evaluation script for math_coding."""
 import os
 
-from azure.ai.evaluation import F1ScoreEvaluator, evaluate
+from azure.ai.evaluation import evaluate
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv

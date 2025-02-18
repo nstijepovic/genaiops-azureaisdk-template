@@ -7,7 +7,6 @@ from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
 from lib.agent_eval.agent_score import AgentEvaluator
-
 from math_coding_agent.flows.math_code_generation.pure_python_flow import (
     get_math_response
 )
@@ -39,6 +38,6 @@ def eval_run_eval(
             "agent_score": agent_evaluator,
         },
         azure_ai_project=project.scope,
-        output_path=f"{output_path}/{name}_math_len.json"
+        output_path=f"{output_path}/{name}_math_agent.json"
     )
     return result

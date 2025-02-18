@@ -41,6 +41,7 @@ def prepare_and_execute(
     base_path: Optional[str] = None,
     env_name: Optional[str] = None,
     report_dir: Optional[str] = None,
+    eval_to_exec: Optional[str] = "*",
 ):
     """Prepare and execute the evaluations for the given experiment."""
     load_dotenv(override=True)
@@ -68,122 +69,127 @@ def prepare_and_execute(
 
         for evaluator in eval_flows:
             logger.info("Processing evaluator: %s", evaluator.name)
-            evaluator_path = os.path.join(
-                base_path, evaluator.flow
-            )
-            logger.debug("Evaluator path: %s", evaluator_path)
-            evaluator.resolve_variables()
 
-            set_environment_variables(evaluator.resolved_env_vars)
-            logger.debug("Set evaluator-specific environment variables")
-
-            try:
-                logger.debug(
-                    "PROMPTY_FILE value: %s", os.environ.get(
-                        'PROMPTY_FILE'
-                        )
-                )
-            except KeyError:
-                logger.warning("PROMPTY_FILE environment variable not set")
-                raise
-
-            service_module = None
-            eval_filename = evaluator.name + ".py"
-
-            if os.path.isfile(os.path.join(evaluator_path, eval_filename)):
-                logger.info("Found evaluation file: %s", eval_filename)
-                module_name = evaluator.name.lstrip().rstrip()
-                flow_components = evaluator_path.split(os.sep)
-                flow_formatted = '.'.join(flow_components)
-                module_path = (
-                    f'{flow_formatted}.'
-                    f'{module_name}'
-                )
-
-                dependent_modules_dir = os.path.join(
-                    base_path, experiment.flow
-                    )
-                logger.debug("Adding to sys.path: %s", dependent_modules_dir)
-                sys.path.append(dependent_modules_dir)
-
-                # evaluations folder
-                current_dir = os.path.dirname(os.path.abspath(__file__))
-                parent_dir = os.path.dirname(current_dir)
-
-                logger.debug("Adding to sys.path: %s", parent_dir)
-                sys.path.insert(0, parent_dir)
-
-                logger.info("Importing module: %s", module_path)
-                service_module = importlib.import_module(
-                    module_path
-                    )
-
-                module_names = dir(service_module)
-
-                # Filter names to get functions defined in module
-                function_names = [
-                    name for name in module_names
-                    if inspect.isfunction
-                    (
-                        getattr(
-                            service_module,
-                            name
-                            )
-                        )
-                    ]
-                logger.debug("Found %d functions in module", len(
-                    function_names
-                    )
-                )
-
-                for function_name in function_names:
-                    if (
-                        function_name.lower().startswith('eval_')
-                    ):
-                        logger.info(
-                            "Executing evaluation function: %s", function_name
-                        )
-                        service_function = getattr(
-                            service_module,
-                            function_name
-                            )
-                        for ds in evaluator.datasets:
-                            logger.info("Processing dataset: %s", ds.source)
-
-                            timestamp = datetime.datetime.now().strftime(
-                                "%Y%m%d_%H%M%S"
-                                )
-                            eval_id = f"{experiment_name}_eval_{timestamp}"
-
-                            if inspect.iscoroutinefunction(service_function):
-                                logger.debug(
-                                    "Executing async evaluation function"
-                                )
-                                result = asyncio.run(service_function(
-                                    eval_id,
-                                    os.path.join(base_path, ds.source),
-                                    ds.mappings,
-                                    report_dir
-                                ))
-                            else:
-                                logger.debug(
-                                    "Executing sync evaluation function"
-                                )
-                                result = service_function(
-                                    eval_id,
-                                    os.path.join(
-                                        base_path,
-                                        ds.source
-                                    ),
-                                    ds.mappings,
-                                    report_dir
-                                )
-                            logger.info(
-                                "Evaluation completed successfully: %s", result
-                            )
-                            results.append(result)
+            if eval_to_exec not in ["*", evaluator.name]:
+                logger.info("Evaluator could not be processed: %s", evaluator.name)
+                continue
             else:
-                print(f"No evaluation flow found for {evaluator.name}")
+                evaluator_path = os.path.join(
+                    base_path, evaluator.flow
+                )
+                logger.debug("Evaluator path: %s", evaluator_path)
+                evaluator.resolve_variables()
+
+                set_environment_variables(evaluator.resolved_env_vars)
+                logger.debug("Set evaluator-specific environment variables")
+
+                try:
+                    logger.debug(
+                        "PROMPTY_FILE value: %s", os.environ.get(
+                            'PROMPTY_FILE'
+                            )
+                    )
+                except KeyError:
+                    logger.warning("PROMPTY_FILE environment variable not set")
+                    raise
+
+                service_module = None
+                eval_filename = evaluator.name + ".py"
+
+                if os.path.isfile(os.path.join(evaluator_path, eval_filename)):
+                    logger.info("Found evaluation file: %s", eval_filename)
+                    module_name = evaluator.name.lstrip().rstrip()
+                    flow_components = evaluator_path.split(os.sep)
+                    flow_formatted = '.'.join(flow_components)
+                    module_path = (
+                        f'{flow_formatted}.'
+                        f'{module_name}'
+                    )
+
+                    dependent_modules_dir = os.path.join(
+                        base_path, experiment.flow
+                        )
+                    logger.debug("Adding to sys.path: %s", dependent_modules_dir)
+                    sys.path.append(dependent_modules_dir)
+
+                    # evaluations folder
+                    current_dir = os.path.dirname(os.path.abspath(__file__))
+                    parent_dir = os.path.dirname(current_dir)
+
+                    logger.debug("Adding to sys.path: %s", parent_dir)
+                    sys.path.insert(0, parent_dir)
+
+                    logger.info("Importing module: %s", module_path)
+                    service_module = importlib.import_module(
+                        module_path
+                        )
+
+                    module_names = dir(service_module)
+
+                    # Filter names to get functions defined in module
+                    function_names = [
+                        name for name in module_names
+                        if inspect.isfunction
+                        (
+                            getattr(
+                                service_module,
+                                name
+                                )
+                            )
+                        ]
+                    logger.debug("Found %d functions in module", len(
+                        function_names
+                        )
+                    )
+
+                    for function_name in function_names:
+                        if (
+                            function_name.lower().startswith('eval_')
+                        ):
+                            logger.info(
+                                "Executing evaluation function: %s", function_name
+                            )
+                            service_function = getattr(
+                                service_module,
+                                function_name
+                                )
+                            for ds in evaluator.datasets:
+                                logger.info("Processing dataset: %s", ds.source)
+
+                                timestamp = datetime.datetime.now().strftime(
+                                    "%Y%m%d_%H%M%S"
+                                    )
+                                eval_id = f"{experiment_name}_eval_{timestamp}"
+
+                                if inspect.iscoroutinefunction(service_function):
+                                    logger.debug(
+                                        "Executing async evaluation function"
+                                    )
+                                    result = asyncio.run(service_function(
+                                        eval_id,
+                                        os.path.join(base_path, ds.source),
+                                        ds.mappings,
+                                        report_dir
+                                    ))
+                                else:
+                                    logger.debug(
+                                        "Executing sync evaluation function"
+                                    )
+                                    result = service_function(
+                                        eval_id,
+                                        os.path.join(
+                                            base_path,
+                                            ds.source
+                                        ),
+                                        ds.mappings,
+                                        report_dir
+                                    )
+                                logger.info(
+                                    "Evaluation completed successfully: %s", result
+                                )
+                                results.append(result)
+                else:
+                    print(f"No evaluation flow found for {evaluator.name}")
 
         return results
     except Exception as e:
@@ -216,11 +222,19 @@ if __name__ == "__main__":
         type=str,
         help="experiment config file name",
     )
+
+    parser.add_argument(
+        "--eval_to_exec",
+        type=str,
+        help="experiment config file name",
+        default="*"
+    )
     args = parser.parse_args()
 
     prepare_and_execute(
         exp_filename=args.experiment_config_file,
         base_path=args.base_path,
         env_name=args.environment_name,
-        report_dir=args.report_dir
+        report_dir=args.report_dir,
+        eval_to_exec=args.eval_to_exec,
     )

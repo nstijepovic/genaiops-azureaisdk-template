@@ -2,15 +2,14 @@
 import json
 import os
 import time
-from dotenv import load_dotenv
 from typing import Any, Dict, List
+from dotenv import load_dotenv
 from azure.ai.inference.prompts import PromptTemplate
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects.models import CodeInterpreterTool
 from azure.ai.projects import AIProjectClient
-
-from opentelemetry import trace
 from azure.monitor.opentelemetry import configure_azure_monitor
+from opentelemetry import trace
 
 project_client = AIProjectClient.from_connection_string(
     credential=DefaultAzureCredential(), conn_str=os.environ["CONNECTION_STRING"]
@@ -87,7 +86,7 @@ def get_math_response(question):
 
     messages = prompt_template.create_messages(question=question)
 
-    input = " ".join([json.dumps(entry) for entry in messages])
+    message_input = " ".join([json.dumps(entry) for entry in messages])
 
     with project_client:
         code_interpreter = CodeInterpreterTool()
@@ -95,7 +94,7 @@ def get_math_response(question):
         agent = project_client.agents.create_agent(
             model=os.environ["GPT4O_DEPLOYMENT_NAME"],
             name="math-agent",
-            instructions=input,
+            instructions=message_input,
             tools=code_interpreter.definitions,
             tool_resources=code_interpreter.resources,
         )
@@ -108,7 +107,9 @@ def get_math_response(question):
             content=question,
         )
 
-        run = project_client.agents.create_and_process_run(thread_id=thread.id, assistant_id=agent.id)
+        run = project_client.agents.create_and_process_run(
+            thread_id=thread.id, assistant_id=agent.id
+            )
 
         while run.status in ["queued", "in_progress", "requires_action"]:
             # Wait for a second
@@ -132,7 +133,7 @@ def get_math_response(question):
         project_client.agents.delete_thread(thread.id)
         project_client.agents.delete_agent(agent.id)
         return {
-            "response": last_msg.text.value, 
+            "response": last_msg.text.value,
             "full_output": convert_and_serialize(messages)
         }
 
