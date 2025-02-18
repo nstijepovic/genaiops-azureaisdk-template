@@ -4,7 +4,7 @@ This documentation provides a step-by-step guide to setting up, running, and man
 
 ** detailed documentation is available in the [docs](./docs/index.md) folder. ** 
 
-## Azure AI Foundry GenAIops Features
+## Azure AI Foundry GenAIOps Features
 
 ### Inner Loop - Experimentation and Evaluation
 
