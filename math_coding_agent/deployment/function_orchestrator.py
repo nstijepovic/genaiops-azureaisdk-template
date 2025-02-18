@@ -50,8 +50,8 @@ def enable_telemetry():
     logging.info("Enabled telemetry logging to project, view traces at:")
 
 
-@bp.route(route="process-math")
-def process_math(req: func.HttpRequest) -> func.HttpResponse:
+@bp.route(route="process-math-agent")
+def process_math_agent(req: func.HttpRequest) -> func.HttpResponse:
     """
     HTTP Trigger handler that coordinates the request/response flow
     and delegates business logic to pure_python_flow.py
