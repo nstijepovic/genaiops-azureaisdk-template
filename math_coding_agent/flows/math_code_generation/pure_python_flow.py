@@ -88,54 +88,53 @@ def get_math_response(question):
 
     message_input = " ".join([json.dumps(entry) for entry in messages])
 
-    with project_client:
-        code_interpreter = CodeInterpreterTool()
+    code_interpreter = CodeInterpreterTool()
 
-        agent = project_client.agents.create_agent(
-            model=os.environ["GPT4O_DEPLOYMENT_NAME"],
-            name="math-agent",
-            instructions=message_input,
-            tools=code_interpreter.definitions,
-            tool_resources=code_interpreter.resources,
+    agent = project_client.agents.create_agent(
+        model=os.environ["GPT4O_DEPLOYMENT_NAME"],
+        name="math-agent",
+        instructions=message_input,
+        tools=code_interpreter.definitions,
+        tool_resources=code_interpreter.resources,
+    )
+
+    thread = project_client.agents.create_thread()
+
+    project_client.agents.create_message(
+        thread_id=thread.id,
+        role="user",
+        content=question,
+    )
+
+    run = project_client.agents.create_and_process_run(
+        thread_id=thread.id, assistant_id=agent.id
         )
 
-        thread = project_client.agents.create_thread()
+    while run.status in ["queued", "in_progress", "requires_action"]:
+        # Wait for a second
+        time.sleep(1)
+        run = project_client.agents.get_run(thread_id=thread.id, run_id=run.id)
 
-        project_client.agents.create_message(
-            thread_id=thread.id,
-            role="user",
-            content=question,
-        )
+        print(f"Run status: {run.status}")
 
-        run = project_client.agents.create_and_process_run(
-            thread_id=thread.id, assistant_id=agent.id
-            )
+    if run.status == "failed":
+        # Check if you got "Rate limit is exceeded.", then you want to get more quota
+        print(f"Run failed: {run.last_error}")
 
-        while run.status in ["queued", "in_progress", "requires_action"]:
-            # Wait for a second
-            time.sleep(1)
-            run = project_client.agents.get_run(thread_id=thread.id, run_id=run.id)
+    messages = project_client.agents.list_messages(thread_id=thread.id)
+    print(f"Messages: {messages}")
 
-            print(f"Run status: {run.status}")
+    # Get the last message from the sender
+    last_msg = messages.get_last_text_message_by_role("assistant")
+    if last_msg:
+        print(f"Last Message: {last_msg.text.value}")
 
-        if run.status == "failed":
-            # Check if you got "Rate limit is exceeded.", then you want to get more quota
-            print(f"Run failed: {run.last_error}")
-
-        messages = project_client.agents.list_messages(thread_id=thread.id)
-        print(f"Messages: {messages}")
-
-        # Get the last message from the sender
-        last_msg = messages.get_last_text_message_by_role("assistant")
-        if last_msg:
-            print(f"Last Message: {last_msg.text.value}")
-
-        project_client.agents.delete_thread(thread.id)
-        project_client.agents.delete_agent(agent.id)
-        return {
-            "response": last_msg.text.value,
-            "full_output": convert_and_serialize(messages)
-        }
+    project_client.agents.delete_thread(thread.id)
+    project_client.agents.delete_agent(agent.id)
+    return {
+        "response": last_msg.text.value,
+        "full_output": convert_and_serialize(messages)
+    }
 
 
 if __name__ == "__main__":
