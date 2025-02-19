@@ -1,0 +1,51 @@
+name: Deploy Terraform to Azure
+
+on:
+  # Trigger this workflow only when manually dispatched from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy-terraform:
+    name: Deploy Terraform to Azure
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: infra/terraform
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}" \
+            -backend-config="container_name=${{ secrets.STORAGE_CONTAINER_NAME }}" \
+            -backend-config="key=terraform.state" \
+            -backend-config="resource_group_name=${{ secrets.STORAGE_RG_NAME }}" \
+            -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
+      - name: Terraform Validate
+        working-directory: infra/terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: infra/terraform
+        run: |
+          terraform plan \
+            -out=tfplan \
+            -var-file=dev.tfvars \
+            -input=false
+
+      - name: Terraform Apply
+        working-directory: infra/terraform
+        run: |
+          terraform apply \
+            -input=false \
+            tfplan
