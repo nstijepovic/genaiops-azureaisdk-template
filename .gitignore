@@ -105,7 +105,7 @@ terraform.tfstate.backup
 .terraform.tfstate.lock.info 
 # SageMath parsed files
 *.sage.py
-.vscode
+
 # Environments
 function_package/
 function_package.zip
@@ -154,4 +154,3 @@ cython_debug/
 
 .idea/
 
-.vscode

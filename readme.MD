@@ -298,3 +298,45 @@ AOAI_API_KEY=your_aoai_key_here
 Secrets Management: Always store sensitive information in GitHub Secrets or .env files.
 Environment Isolation: Use separate environments (e.g., dev, test, prod) for different stages of development.
 Version Control: Regularly commit and push changes to GitHub to ensure code is backed up and workflows are triggered.# genaiops-azureaisdk-template
+
+## **9. Infrastructure Deployment with Terraform**
+The repository includes Terraform code (`infra/terraform/`) for provisioning required **Azure infrastructure**:
+
+✅ **Resource Group**  
+✅ **Azure Storage Account**  
+✅ **Azure Key Vault**  
+✅ **Application Insights**  
+✅ **Azure AI Services & AI Hub**  
+✅ **Azure Container Registry**  
+
+### **9.1 Prerequisites**
+Ensure the following before deploying the infrastructure:
+
+- **Azure Subscription** with appropriate permissions (Contributor or Owner).  
+- **Azure CLI** installed and configured (`az login`).  
+- **Terraform CLI** installed ([Terraform Download](https://developer.hashicorp.com/terraform/downloads)).  
+- **GitHub Secrets** configured for authentication:
+  - `AZURE_CREDENTIALS` (Service Principal JSON for authentication)
+  - `STORAGE_ACCOUNT_NAME`
+  - `STORAGE_CONTAINER_NAME`
+  - `STORAGE_RG_NAME`
+  - `AZURE_SUBSCRIPTION_ID`
+  - `TF_STATE_KEY`
+
+---
+
+### **9.2 Deploying via GitHub Actions**
+Terraform deployment is automated using **GitHub Actions**.
+
+#### **Triggering the Deployment**
+1. Navigate to **GitHub Actions** in your repository.  
+2. Select **Terraform Deployment Workflow**.  
+3. Click **Run workflow** to trigger an infrastructure deployment.
+
+#### **GitHub Workflow Highlights**
+- **Terraform Plan & Validate**: Ensures the infrastructure is valid before applying.  
+- **Terraform Apply**: Deploys changes automatically upon manual trigger.  
+- **Remote State Storage**: Uses **Azure Storage** to store Terraform state for consistency.  
+
+📌 **Workflow File:**  
+The deployment workflow is located in `.github/workflows/infra_deploy_terraform_workflow.yaml`.
