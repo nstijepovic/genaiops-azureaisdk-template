@@ -22,9 +22,28 @@ variable "sku" {
     default     = "S0"
 }
 
+# ──────────────── Azure Open AI ────────────────
+variable "azure_openai" {
+  description = "Map of Azure OpenAI resources to create."
+  type = map(object({
+    sku_name = string
+  }))
+}
+
+variable "azure_openai_deployments" {
+  description = "Map of OpenAI deployments per AOAI instance"
+  type = map(map(object({
+    deployment_name = string
+    model_name      = string
+    model_version   = string
+    scale_type      = string
+  })))
+  default = {}
+}
 
 resource "random_string" "suffix" {  
   length           = 4  
   special          = false  
   upper            = false  
 } 
+

@@ -9,3 +9,9 @@ output "project_id" {
 output "endpoint" {
   value = azapi_resource.AIServicesResource.output
 }
+
+output "openai_deployments" {
+  value = {
+    for instance, aoai in module.aoai : instance => aoai.aoai_endpoint
+  }
+}
