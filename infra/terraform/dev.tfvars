@@ -1,3 +1,9 @@
+azure_openai = {
+  aoai1 = {
+    sku_name = "S0"
+  }
+}
+
 azure_openai_deployments = {
   aoai1 = {
     gpt4o = {
