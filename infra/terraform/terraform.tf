@@ -27,6 +27,7 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = false
     }
   }
+  subscription_id = "627407a7-4100-4cc8-8c59-abd81eaaa4cd"
 }
 
 provider "azapi" {
