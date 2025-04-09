@@ -6,14 +6,14 @@ azure_openai = {
 
 azure_openai_deployments = {
   aoai1 = {
-    gpt4o = {
+    gpt4o-may = {
     deployment_name = "gpt-4o-may"
     model_name      = "gpt-4o"
     model_version   = "2024-05-13"
     scale_type      = "GlobalStandard"
   }
-    gpt4o-2 = {
-    deployment_name = "gpt-4oaugust"
+    gpt4o--august = {
+    deployment_name = "gpt-4o-august"
     model_name      = "gpt-4o"
     model_version   = "2024-08-06"
     scale_type      = "GlobalStandard"
