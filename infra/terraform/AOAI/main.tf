@@ -6,20 +6,6 @@ resource "azurerm_cognitive_account" "aoai" {
   kind     = "OpenAI"
   sku_name = var.sku_name
 
-  custom_subdomain_name = var.name  # required when using network_acls
-
-  public_network_access_enabled = true
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  network_acls {
-    default_action = "Allow"
-
-    # optional: restrict by IP range or VNets
-    ip_rules = []
-  }
 }
 
 resource "azurerm_cognitive_deployment" "model" {
