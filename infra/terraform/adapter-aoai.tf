@@ -10,9 +10,9 @@ resource "random_string" "aoai_suffix" {
 
 module "aoai" {
   for_each            = var.azure_openai
-  source              = "./tf_modules/AOAI"
+  source              = "./AOAI"
   name                = "aoai-${each.key}-${random_string.aoai_suffix[each.key].result}"
-  location            = var.location
+  location            = var.resource_group_location
   resource_group_name = azurerm_resource_group.main.name
   sku_name            = each.value.sku_name
 
